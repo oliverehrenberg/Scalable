@@ -1,0 +1,282 @@
+// Button Base
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: $spacing-md $spacing-xl;
+  font-size: $font-size-base;
+  font-weight: $font-weight-medium;
+  line-height: 1;
+  text-decoration: none;
+  border: 2px solid transparent;
+  border-radius: $border-radius-full;
+  cursor: pointer;
+  transition: all $transition-fast;
+  min-height: 44px; // Accessibility minimum touch target
+  
+  &:focus {
+    outline: 2px solid var(--primary-purple);
+    outline-offset: 2px;
+  }
+  
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+  
+  // Sizes
+  &-sm {
+    padding: $spacing-sm $spacing-lg;
+    font-size: $font-size-sm;
+    min-height: 36px;
+  }
+  
+  &-lg {
+    padding: $spacing-lg $spacing-2xl;
+    font-size: $font-size-lg;
+    min-height: 52px;
+  }
+  
+  // Icons
+  .btn-icon {
+    margin-right: $spacing-sm;
+    
+    &:last-child {
+      margin-right: 0;
+      margin-left: $spacing-sm;
+    }
+    
+    &:only-child {
+      margin: 0;
+    }
+  }
+}
+
+// Primary Button (Purple)
+.btn-primary {
+  background: linear-gradient(135deg, var(--primary-purple) 0%, var(--primary-purple-dark) 100%);
+  color: var(--text-white);
+  border-color: var(--primary-purple);
+  box-shadow: var(--shadow-sm);
+  
+  &:hover {
+    background: linear-gradient(135deg, var(--primary-purple-dark) 0%, var(--primary-purple) 100%);
+    box-shadow: var(--shadow-md);
+    transform: translateY(-1px);
+  }
+  
+  &:active {
+    transform: translateY(0);
+    box-shadow: var(--shadow-sm);
+  }
+  
+  &:disabled {
+    background: var(--gray-400);
+    border-color: var(--gray-400);
+    
+    &:hover {
+      transform: none;
+      box-shadow: var(--shadow-sm);
+    }
+  }
+}
+
+// Secondary Button (Transparent/Outline)
+.btn-secondary {
+  background: rgba(139, 92, 246, 0.1); // Semi-transparent purple
+  color: var(--primary-purple);
+  border-color: var(--primary-purple);
+  backdrop-filter: blur(10px);
+  
+  &:hover {
+    background: rgba(139, 92, 246, 0.2);
+    border-color: var(--primary-purple-dark);
+    color: var(--primary-purple-dark);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-md);
+  }
+  
+  &:active {
+    transform: translateY(0);
+    background: rgba(139, 92, 246, 0.3);
+  }
+  
+  &:disabled {
+    background: rgba(156, 163, 175, 0.1);
+    color: var(--gray-400);
+    border-color: var(--gray-400);
+    
+    &:hover {
+      transform: none;
+      box-shadow: none;
+    }
+  }
+}
+
+// Ghost Button (Minimal)
+.btn-ghost {
+  background: transparent;
+  color: var(--text-primary);
+  border-color: transparent;
+  
+  &:hover {
+    background: var(--bg-secondary);
+    color: var(--primary-purple);
+  }
+  
+  &:active {
+    background: var(--bg-muted);
+  }
+}
+
+// Text Button (Link-like)
+.btn-text {
+  background: none;
+  color: var(--primary-purple);
+  border: none;
+  padding: $spacing-sm;
+  border-radius: $border-radius-md;
+  
+  &:hover {
+    color: var(--primary-purple-dark);
+    background: rgba(139, 92, 246, 0.1);
+  }
+  
+  &:active {
+    background: rgba(139, 92, 246, 0.2);
+  }
+}
+
+// Danger Button
+.btn-danger {
+  background: linear-gradient(135deg, var(--secondary-red) 0%, #dc2626 100%);
+  color: var(--text-white);
+  border-color: var(--secondary-red);
+  
+  &:hover {
+    background: linear-gradient(135deg, #dc2626 0%, var(--secondary-red) 100%);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-md);
+  }
+  
+  &:active {
+    transform: translateY(0);
+  }
+}
+
+// Success Button
+.btn-success {
+  background: linear-gradient(135deg, var(--secondary-green) 0%, #059669 100%);
+  color: var(--text-white);
+  border-color: var(--secondary-green);
+  
+  &:hover {
+    background: linear-gradient(135deg, #059669 0%, var(--secondary-green) 100%);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-md);
+  }
+  
+  &:active {
+    transform: translateY(0);
+  }
+}
+
+// Button Group
+.btn-group {
+  display: inline-flex;
+  
+  .btn {
+    border-radius: 0;
+    
+    &:first-child {
+      border-top-left-radius: $border-radius-full;
+      border-bottom-left-radius: $border-radius-full;
+    }
+    
+    &:last-child {
+      border-top-right-radius: $border-radius-full;
+      border-bottom-right-radius: $border-radius-full;
+    }
+    
+    &:not(:first-child) {
+      margin-left: -1px;
+    }
+  }
+}
+
+// Loading state
+.btn-loading {
+  position: relative;
+  color: transparent;
+  
+  &::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 16px;
+    height: 16px;
+    border: 2px solid currentColor;
+    border-radius: 50%;
+    border-top-color: transparent;
+    animation: spin 1s linear infinite;
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
+
+// CTA specific buttons
+.hero-cta {
+  font-size: $font-size-lg;
+  padding: $spacing-lg $spacing-2xl;
+  min-width: 160px;
+  
+  @media (max-width: $breakpoint-sm) {
+    font-size: $font-size-base;
+    padding: $spacing-md $spacing-xl;
+    min-width: 140px;
+  }
+}
+
+// Form submit button
+.form-submit {
+  min-width: 120px;
+  
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+}
+
+
+
+// Chat widget button
+.chat-button {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--primary-purple) 0%, var(--primary-purple-dark) 100%);
+  color: var(--text-white);
+  border: none;
+  font-size: $font-size-xl;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: var(--shadow-lg);
+  transition: all $transition-fast;
+  
+  &:hover {
+    transform: scale(1.1);
+    box-shadow: var(--shadow-xl);
+  }
+  
+  &:active {
+    transform: scale(1.05);
+  }
+} 

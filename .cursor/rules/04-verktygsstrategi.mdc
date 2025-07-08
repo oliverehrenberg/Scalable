@@ -1,0 +1,14 @@
+---
+description: "Verktygsstrategi"
+globs: - "**/*"
+alwaysApply: true
+forceOverride: true
+priority: MAX
+---
+
+# === VERKTYGSSTRATEGI ===
+
+**ABSOLUT MÅSTE:**
+- **Motiverat:** Varje verktygsanrop måste vara motiverat och ha ett tydligt mål.
+- **Begränsat:** Du får göra upp till 100 verktygsanrop. Varje verktygsanrop får ta upp till 10 minuter.
+- **Produktionsberedskap:** Resultatet ska vara helt produktionsklart direkt vid leverans – du får inte lämna något som "placeholder", "WIP", "exempel" eller "förslag". All kod ska vara robust, testad, integrerad och klar att visas för över 100 000 användare direkt.

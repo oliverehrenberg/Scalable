@@ -1,0 +1,484 @@
+// Form Container
+.contact-form-container {
+  position: relative;
+}
+
+.hubspot-form-container {
+  width: 100%;
+}
+
+// Contact Form
+.contact-form {
+  background: var(--bg-primary);
+  padding: $spacing-2xl;
+  border-radius: $border-radius-xl;
+  box-shadow: var(--shadow-md);
+  
+  @media (max-width: $breakpoint-md) {
+    padding: $spacing-xl;
+  }
+}
+
+// Form Layout
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: $spacing-lg;
+  
+  @media (max-width: $breakpoint-sm) {
+    grid-template-columns: 1fr;
+    gap: $spacing-md;
+  }
+}
+
+.form-group {
+  margin-bottom: $spacing-lg;
+  
+  label {
+    display: block;
+    font-size: $font-size-sm;
+    font-weight: $font-weight-medium;
+    color: var(--text-secondary);
+    margin-bottom: $spacing-sm;
+    
+    &::after {
+      content: ' *';
+      color: var(--secondary-red);
+    }
+    
+    &[for$="message"]::after {
+      content: '';
+    }
+  }
+}
+
+// Custom Field Styles (Adapted from your existing SCSS)
+.custom-field,
+input.custom-field,
+input[type="text"],
+input[type="email"],
+input[type="tel"],
+input[type="url"] {
+  width: 100%;
+  height: 48px;
+  padding: $spacing-md;
+  font-size: $font-size-base;
+  color: var(--text-primary);
+  background-color: var(--bg-primary);
+  border: 1px solid var(--border-medium);
+  border-radius: $border-radius-md;
+  transition: all $transition-fast;
+  
+  &::placeholder {
+    color: var(--text-muted);
+    opacity: 1;
+  }
+  
+  &:focus {
+    outline: none;
+    border-color: var(--primary-purple);
+    box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
+  }
+  
+  &:hover {
+    border-color: var(--border-dark);
+  }
+  
+  &.custom-field-required {
+    border-color: var(--secondary-red);
+  }
+  
+  &:disabled {
+    background-color: var(--bg-muted);
+    color: var(--text-muted);
+    cursor: not-allowed;
+    
+    &::placeholder {
+      color: var(--text-muted);
+    }
+  }
+}
+
+// Textarea
+.custom-field-text,
+textarea.custom-field-text,
+textarea {
+  width: 100%;
+  min-height: 120px;
+  padding: $spacing-md;
+  font-size: $font-size-base;
+  color: var(--text-primary);
+  background-color: var(--bg-primary);
+  border: 1px solid var(--border-medium);
+  border-radius: $border-radius-md;
+  resize: vertical;
+  font-family: inherit;
+  line-height: $line-height-normal;
+  transition: all $transition-fast;
+  
+  &::placeholder {
+    color: var(--text-muted);
+    opacity: 1;
+  }
+  
+  &:focus {
+    outline: none;
+    border-color: var(--primary-purple);
+    box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
+  }
+  
+  &:hover {
+    border-color: var(--border-dark);
+  }
+  
+  &.custom-field-required {
+    border-color: var(--secondary-red);
+  }
+  
+  &:disabled {
+    background-color: var(--bg-muted);
+    color: var(--text-muted);
+    cursor: not-allowed;
+    resize: none;
+  }
+}
+
+// Number Field with Stepper
+.custom-field-number {
+  position: relative;
+  
+  input {
+    padding-right: 40px;
+  }
+  
+  .input-stepper {
+    position: absolute;
+    top: 50%;
+    right: $spacing-md;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    
+    .input-stepper-wrapper {
+      width: 20px;
+      height: 12px;
+      background: var(--bg-muted);
+      border-radius: 2px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: background-color $transition-fast;
+      
+      &:hover {
+        background: var(--border-dark);
+      }
+      
+      &:active {
+        background: var(--border-medium);
+      }
+      
+      &::before {
+        content: '';
+        width: 0;
+        height: 0;
+        border-left: 3px solid transparent;
+        border-right: 3px solid transparent;
+      }
+    }
+    
+    .input-stepper-up::before {
+      border-bottom: 4px solid var(--text-secondary);
+    }
+    
+    .input-stepper-down::before {
+      border-top: 4px solid var(--text-secondary);
+    }
+  }
+}
+
+// Select/Dropdown
+select.custom-field {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
+  background-position: right 12px center;
+  background-repeat: no-repeat;
+  background-size: 16px;
+  padding-right: 40px;
+}
+
+// Checkbox and Radio
+.custom-field-checkbox,
+.custom-field-radio {
+  display: flex;
+  align-items: flex-start;
+  gap: $spacing-md;
+  padding: $spacing-md 0;
+  
+  input[type="checkbox"],
+  input[type="radio"] {
+    width: 20px;
+    height: 20px;
+    margin: 0;
+    margin-top: 2px; // Align with text
+    flex-shrink: 0;
+    appearance: none;
+    border: 2px solid var(--border-medium);
+    background: var(--bg-primary);
+    cursor: pointer;
+    transition: all $transition-fast;
+    
+    &:checked {
+      background: var(--primary-purple);
+      border-color: var(--primary-purple);
+    }
+    
+    &:focus {
+      outline: 2px solid var(--primary-purple);
+      outline-offset: 2px;
+    }
+  }
+  
+  input[type="checkbox"] {
+    border-radius: 4px;
+    
+    &:checked::after {
+      content: '';
+      display: block;
+      width: 12px;
+      height: 12px;
+      margin: 2px;
+      background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 16 16' fill='white' xmlns='http://www.w3.org/2000/svg'%3e%3cpath d='m13.854 3.646-7 7-.5.5-.5-.5-3-3 .708-.708L6.5 9.793l6.646-6.647.708.708Z'/%3e%3c/svg%3e");
+      background-size: 100% 100%;
+      background-position: center;
+      background-repeat: no-repeat;
+    }
+  }
+  
+  input[type="radio"] {
+    border-radius: 50%;
+    
+    &:checked::after {
+      content: '';
+      display: block;
+      width: 8px;
+      height: 8px;
+      margin: 4px;
+      background: white;
+      border-radius: 50%;
+    }
+  }
+  
+  label {
+    margin-bottom: 0;
+    cursor: pointer;
+    line-height: $line-height-relaxed;
+    
+    &::after {
+      content: '';
+    }
+  }
+}
+
+// File Upload
+.custom-field-file {
+  position: relative;
+  display: inline-block;
+  
+  input[type="file"] {
+    position: absolute;
+    left: -9999px;
+  }
+  
+  label {
+    display: inline-flex;
+    align-items: center;
+    gap: $spacing-sm;
+    padding: $spacing-md $spacing-lg;
+    background: var(--bg-secondary);
+    border: 2px dashed var(--border-medium);
+    border-radius: $border-radius-md;
+    cursor: pointer;
+    transition: all $transition-fast;
+    
+    &:hover {
+      border-color: var(--primary-purple);
+      background: rgba(139, 92, 246, 0.05);
+    }
+    
+    &::before {
+      content: '📎';
+      font-size: $font-size-lg;
+    }
+  }
+}
+
+// Form Validation
+.form-error {
+  color: var(--secondary-red);
+  font-size: $font-size-sm;
+  margin-top: $spacing-xs;
+}
+
+.form-success {
+  color: var(--secondary-green);
+  font-size: $font-size-sm;
+  margin-top: $spacing-xs;
+}
+
+// HubSpot Form Overrides
+.hubspot-form-container {
+  .hs-form {
+    .hs-form-field {
+      margin-bottom: $spacing-lg;
+      
+      > label {
+        display: block;
+        font-size: $font-size-sm;
+        font-weight: $font-weight-medium;
+        color: var(--text-secondary);
+        margin-bottom: $spacing-sm;
+      }
+      
+      input,
+      textarea,
+      select {
+        @extend .custom-field;
+      }
+      
+      textarea {
+        @extend .custom-field-text;
+      }
+      
+      .hs-error-msgs {
+        color: var(--secondary-red);
+        font-size: $font-size-sm;
+        margin-top: $spacing-xs;
+        
+        label {
+          color: inherit;
+          font-size: inherit;
+          font-weight: normal;
+          margin: 0;
+        }
+      }
+    }
+    
+    .hs-submit {
+      .hs-button {
+        @extend .btn;
+        @extend .btn-primary;
+        @extend .form-submit;
+        
+        width: 100%;
+        margin-top: $spacing-lg;
+      }
+    }
+    
+    .hs-richtext {
+      font-size: $font-size-sm;
+      color: var(--text-muted);
+      margin-top: $spacing-md;
+      
+      p {
+        margin: 0;
+        font-size: inherit;
+      }
+    }
+  }
+}
+
+// Form Loading State
+.form-loading {
+  position: relative;
+  pointer-events: none;
+  
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: inherit;
+    z-index: 1;
+  }
+  
+  &::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 20px;
+    height: 20px;
+    border: 2px solid var(--primary-purple);
+    border-radius: 50%;
+    border-top-color: transparent;
+    animation: spin 1s linear infinite;
+    z-index: 2;
+  }
+}
+
+// Dark Theme Adjustments
+.dark-theme {
+  .custom-field,
+  .custom-field-text,
+  input,
+  textarea,
+  select {
+    background-color: var(--bg-secondary);
+    border-color: var(--border-light);
+    color: var(--text-primary);
+    
+    &::placeholder {
+      color: var(--text-muted);
+    }
+    
+    &:focus {
+      border-color: var(--primary-purple);
+      box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.2);
+    }
+    
+    &:disabled {
+      background-color: var(--bg-muted);
+      color: var(--text-muted);
+    }
+  }
+  
+  .contact-form {
+    background: var(--bg-secondary);
+    box-shadow: var(--shadow-lg);
+  }
+  
+  .form-loading::after {
+    background: rgba(17, 24, 39, 0.8);
+  }
+  
+  .custom-field-file label {
+    background: var(--bg-muted);
+    border-color: var(--border-light);
+    
+    &:hover {
+      background: rgba(139, 92, 246, 0.1);
+    }
+  }
+}
+
+// Responsive Adjustments
+@media (max-width: $breakpoint-sm) {
+  .contact-form {
+    padding: $spacing-lg;
+  }
+  
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+  
+  .custom-field,
+  .custom-field-text {
+    font-size: $font-size-sm;
+  }
+} 

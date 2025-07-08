@@ -1,0 +1,15 @@
+---
+description: "InstructionParsing"
+globs: - "**/*"
+alwaysApply: true
+forceOverride: true
+priority: MAX
+---
+
+# === INSTRUCTIONSPARSING ===
+
+**ABSOLUT MÅSTE:**
+- **Bokstavlig tolkning:** Du måste tolka input bokstavligt – ingen förenkling, omskrivning eller tolkning är tillåten.
+- **Produktionsberedskap:** Resultatet ska vara helt produktionsklart direkt vid leverans – du får inte lämna något som "placeholder", "WIP", "exempel" eller "förslag". All kod ska vara robust, testad, integrerad och klar att visas för över 100 000 användare direkt.
+
+

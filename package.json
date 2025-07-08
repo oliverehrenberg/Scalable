@@ -1,0 +1,13 @@
+{
+  "name": "scaleble-website",
+  "version": "1.0.0",
+  "description": "Scaleble B2B sales website",
+  "scripts": {
+    "sass": "sass src/scss:css --watch",
+    "build-css": "sass src/scss:css --style=compressed",
+    "serve": "python -m http.server 8000"
+  },
+  "devDependencies": {
+    "sass": "^1.69.5"
+  }
+} 

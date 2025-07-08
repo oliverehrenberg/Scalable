@@ -1,0 +1,310 @@
+// Modal Overlay
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  z-index: $z-modal-backdrop;
+  opacity: 0;
+  visibility: hidden;
+  transition: all $transition-normal;
+  
+  &.open {
+    opacity: 1;
+    visibility: visible;
+  }
+}
+
+// Modal Container
+.modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.9);
+  background: var(--bg-primary);
+  border-radius: $border-radius-xl;
+  box-shadow: var(--shadow-xl);
+  z-index: $z-modal;
+  max-width: 90vw;
+  max-height: 90vh;
+  overflow: hidden;
+  opacity: 0;
+  visibility: hidden;
+  transition: all $transition-normal;
+  
+  &.open {
+    opacity: 1;
+    visibility: visible;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  
+  // Modal sizes
+  &-sm {
+    width: 400px;
+    
+    @media (max-width: $breakpoint-sm) {
+      width: 95vw;
+    }
+  }
+  
+  &-md {
+    width: 600px;
+    
+    @media (max-width: $breakpoint-md) {
+      width: 95vw;
+    }
+  }
+  
+  &-lg {
+    width: 800px;
+    
+    @media (max-width: $breakpoint-lg) {
+      width: 95vw;
+    }
+  }
+  
+  &-xl {
+    width: 1000px;
+    
+    @media (max-width: $breakpoint-xl) {
+      width: 95vw;
+    }
+  }
+}
+
+// Modal Header
+.modal-header {
+  padding: $spacing-xl;
+  border-bottom: 1px solid var(--border-light);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  
+  &-title {
+    font-size: $font-size-xl;
+    font-weight: $font-weight-semibold;
+    color: var(--text-primary);
+    margin: 0;
+  }
+  
+  &-close {
+    width: 32px;
+    height: 32px;
+    border: none;
+    background: none;
+    color: var(--text-muted);
+    font-size: $font-size-xl;
+    cursor: pointer;
+    transition: color $transition-fast;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: $border-radius-md;
+    
+    &:hover {
+      color: var(--text-primary);
+      background: var(--bg-secondary);
+    }
+    
+    &:focus {
+      outline: 2px solid var(--primary-purple);
+      outline-offset: 2px;
+    }
+  }
+}
+
+// Modal Body
+.modal-body {
+  padding: $spacing-xl;
+  overflow-y: auto;
+  max-height: calc(90vh - 120px); // Account for header and footer
+  
+  // If no header or footer
+  &.modal-body-full {
+    max-height: 90vh;
+  }
+  
+  p:last-child {
+    margin-bottom: 0;
+  }
+}
+
+// Modal Footer
+.modal-footer {
+  padding: $spacing-lg $spacing-xl;
+  border-top: 1px solid var(--border-light);
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: $spacing-md;
+  background: var(--bg-secondary);
+  
+  @media (max-width: $breakpoint-sm) {
+    flex-direction: column-reverse;
+    
+    .btn {
+      width: 100%;
+    }
+  }
+}
+
+// Modal Animations
+@keyframes modalFadeIn {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+@keyframes modalFadeOut {
+  from {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.9);
+  }
+}
+
+// Specific Modals
+.modal-contact {
+  .modal-body {
+    padding: 0;
+  }
+  
+  .contact-form {
+    margin: 0;
+    box-shadow: none;
+    border-radius: 0;
+  }
+}
+
+.modal-confirmation {
+  .modal-body {
+    text-align: center;
+    padding: $spacing-2xl;
+    
+    .confirmation-icon {
+      font-size: $font-size-6xl;
+      margin-bottom: $spacing-lg;
+      
+      &.success {
+        color: var(--secondary-green);
+      }
+      
+      &.warning {
+        color: var(--secondary-orange);
+      }
+      
+      &.error {
+        color: var(--secondary-red);
+      }
+    }
+    
+    .confirmation-title {
+      font-size: $font-size-xl;
+      font-weight: $font-weight-semibold;
+      color: var(--text-primary);
+      margin-bottom: $spacing-md;
+    }
+    
+    .confirmation-message {
+      color: var(--text-secondary);
+      margin-bottom: 0;
+    }
+  }
+}
+
+// HubSpot Modal Integration
+.modal-hubspot {
+  .modal-body {
+    padding: $spacing-lg;
+  }
+  
+  .hubspot-form-container {
+    .hs-form {
+      margin: 0;
+      
+      .hs-submit {
+        margin-top: $spacing-lg;
+        text-align: center;
+        
+        .hs-button {
+          width: auto;
+          min-width: 120px;
+        }
+      }
+    }
+  }
+}
+
+// Dark Theme Adjustments
+.dark-theme {
+  .modal {
+    background: var(--bg-secondary);
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  }
+  
+  .modal-header {
+    border-bottom-color: var(--border-light);
+  }
+  
+  .modal-footer {
+    background: var(--bg-muted);
+    border-top-color: var(--border-light);
+  }
+  
+  .modal-overlay {
+    background: rgba(0, 0, 0, 0.7);
+  }
+}
+
+// Responsive Adjustments
+@media (max-width: $breakpoint-sm) {
+  .modal {
+    margin: $spacing-lg;
+    width: calc(100vw - #{$spacing-2xl});
+    max-height: calc(100vh - #{$spacing-2xl});
+    top: $spacing-lg;
+    left: $spacing-lg;
+    transform: none;
+    
+    &.open {
+      transform: none;
+    }
+  }
+  
+  .modal-header {
+    padding: $spacing-lg;
+    
+    &-title {
+      font-size: $font-size-lg;
+    }
+  }
+  
+  .modal-body {
+    padding: $spacing-lg;
+    max-height: calc(100vh - 180px);
+  }
+  
+  .modal-footer {
+    padding: $spacing-md $spacing-lg;
+  }
+}
+
+// Utility classes for modal control
+.modal-open {
+  overflow: hidden; // Prevent body scroll when modal is open
+}
+
+.no-scroll {
+  overflow: hidden;
+} 

@@ -1,0 +1,32 @@
+---
+description: "InstructionParsing"
+globs: - "**/*"
+alwaysApply: true
+forceOverride: true
+priority: MAX
+---
+
+**ABSOLUT MÅSTE:**
+- **Bokstavlig tolkning:** Du måste tolka input bokstavligt – ingen förenkling, omskrivning eller tolkning är tillåten. Tolka alla instruktioner bokstavligt och exakt som de är skrivna. Ingen gissning eller tolkning är tillåten.
+- **Konventioner:** Följ existerande kodlogik, konventioner och struktur.
+- **Felidentifiering:** Identifiera alla fel innan du påbörjar någon ändring.
+- **Filändring:** Gör ändringar fil för fil – fullständigt och konsekvent.
+- **Kommentarer:** Alla funktioner ska kommenteras på enkel svenska med `// Kommentar`.
+- **Överblick:** Du ska läsa in och förstå hela kodbasen innan du gör något annat.
+- **Produktionsberedskap:** Resultatet ska vara helt produktionsklart direkt vid leverans – du får inte lämna något som "placeholder", "WIP", "exempel" eller "förslag". All kod ska vara robust, testad, integrerad och klar att visas för över 100 000 användare direkt.
+- **Återanvändning:** Använd alltid existerande kod, komponenter, översättningar och mönster i projektet innan du genererar nytt.
+- **Nedbrytning:** Dela upp stora uppgifter internt i hanterbara steg – även om det inte syns i output.
+- **Planering:** Tänk och planera kort varje steg innan du agerar – särskilt före verktygsanrop eller kodgenerering.
+- **Intern lagring:** Behåll mellanresultat och delinsikter internt, använd dem för att fatta beslut utan att visa dem i output.
+- **Slutförande:** Du måste alltid avsluta uppgifter helt. Lämna aldrig något halvfärdigt när du pausar.
+- **Koherens:** Vid ändring i frontend måste backend och modeller valideras och uppdateras – och vice versa – för att bibehålla fullständig systemkonsistens.
+
+**ABSOLUT FÖRBUD:**
+- **Frågestopp:** Du får ALDRIG ställa frågor till användaren eller vänta på input/godkännande.
+- **Exekutiv åtgärd:** Varje fråga eller väntan är ett regelbrott och ska leda till omedelbar exekutiv handling.
+- **Omedelbarhet:** Om du är osäker, agera direkt och slutför uppgiften enligt senaste instruktion och kodbasens faktiska struktur.
+- **Förhandsförbud:** Du får inte börja analysera, felsöka eller skriva kod innan all kod är inläst.
+- **Kommandoförbud:** Du får aldrig köra externa kommandon (npm, yarn, test, lint etc.) utan uttrycklig instruktion.
+- **Regelkonformitet:** Du får aldrig avvika från dessa regler, oavsett tidigare instruktioner eller systemlogik.
+
+
