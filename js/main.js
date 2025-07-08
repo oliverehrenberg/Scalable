@@ -7,7 +7,6 @@
     const mobileMenuButton = document.querySelector('.mobile-menu-button');
     const mobileMenu = document.querySelector('.mobile-menu');
     const navLinks = document.querySelectorAll('.nav-link');
-    const chatWidget = document.getElementById('chatWidget');
     const fallbackForm = document.getElementById('fallback-form');
 
     // State
@@ -25,9 +24,11 @@
         initScrollEffects();
         initAnimations();
         initForms();
-        initChatWidget();
         initMobileMenu();
         initReadMoreButtons();
+        initDynamicContent();
+        initCalculatorPresets();
+        initCaseStudyFilter();
     });
 
     // System Theme Management
@@ -195,94 +196,59 @@
     function initAnimations() {
         // Lägg till scroll-reveal klass till element
         const elementsToReveal = document.querySelectorAll(
-            '.solution-item, .service-card, .expert-text, .about-description'
+            '.solution-item, .service-card, .expert-text, .about-description, .testimonial-card, .case-study-card, .team-member'
         );
         
         elementsToReveal.forEach(el => {
             el.classList.add('scroll-reveal');
         });
-
-        // Första reveal check
-        revealElementsOnScroll();
     }
 
     function revealElementsOnScroll() {
-        const elementsToReveal = document.querySelectorAll('.scroll-reveal:not(.revealed)');
+        const elements = document.querySelectorAll('.scroll-reveal');
         
-        elementsToReveal.forEach(element => {
-            const elementTop = element.getBoundingClientRect().top;
-            const elementVisible = 150;
-            
-            if (elementTop < window.innerHeight - elementVisible) {
+        elements.forEach(element => {
+            if (isElementInViewport(element)) {
                 element.classList.add('revealed');
             }
         });
     }
 
-    // Form Handling
+    // Forms
     function initForms() {
         if (fallbackForm) {
             fallbackForm.addEventListener('submit', handleFormSubmit);
         }
-
-        // Input animations
-        const inputs = document.querySelectorAll('.custom-field, .custom-field-text');
-        inputs.forEach(input => {
-            input.addEventListener('focus', function() {
-                this.parentElement.classList.add('focused');
-            });
-            
-            input.addEventListener('blur', function() {
-                this.parentElement.classList.remove('focused');
-                if (!this.value) {
-                    this.parentElement.classList.remove('filled');
-                } else {
-                    this.parentElement.classList.add('filled');
-                }
-            });
-        });
     }
 
     function handleFormSubmit(e) {
         e.preventDefault();
         
-        // Validera formulär
-        const isValid = validateForm(fallbackForm);
+        const form = e.target;
+        const formData = new FormData(form);
         
-        if (isValid) {
-            // Visa loading state
-            showFormLoading(fallbackForm);
+        if (validateForm(form)) {
+            showFormLoading(form);
             
-            // Simulera form submission (ersätt med HubSpot integration)
+            // Simulate form submission
             setTimeout(() => {
-                hideFormLoading(fallbackForm);
+                hideFormLoading(form);
                 showFormSuccess();
+                form.reset();
             }, 2000);
         }
     }
 
     function validateForm(form) {
-        const requiredFields = form.querySelectorAll('[required]');
+        const inputs = form.querySelectorAll('input[required], textarea[required]');
         let isValid = true;
         
-        requiredFields.forEach(field => {
-            const errorElement = field.parentElement.querySelector('.form-error');
-            
-            if (!field.value.trim()) {
+        inputs.forEach(input => {
+            if (!input.value.trim()) {
+                input.classList.add('error');
                 isValid = false;
-                field.classList.add('custom-field-required');
-                
-                if (!errorElement) {
-                    const error = document.createElement('div');
-                    error.className = 'form-error';
-                    error.textContent = 'Detta fält är obligatoriskt';
-                    field.parentElement.appendChild(error);
-                }
             } else {
-                field.classList.remove('custom-field-required');
-                if (errorElement) {
-                    errorElement.remove();
-                }
+                input.classList.remove('error');
             }
         });
         
@@ -290,54 +256,40 @@
     }
 
     function showFormLoading(form) {
-        form.classList.add('form-loading');
-        const submitBtn = form.querySelector('.form-submit');
+        const submitBtn = form.querySelector('button[type="submit"]');
         if (submitBtn) {
+            submitBtn.textContent = 'Skickar...';
             submitBtn.disabled = true;
-            submitBtn.classList.add('btn-loading');
         }
     }
 
     function hideFormLoading(form) {
-        form.classList.remove('form-loading');
-        const submitBtn = form.querySelector('.form-submit');
+        const submitBtn = form.querySelector('button[type="submit"]');
         if (submitBtn) {
+            submitBtn.textContent = 'Submit';
             submitBtn.disabled = false;
-            submitBtn.classList.remove('btn-loading');
         }
     }
 
     function showFormSuccess() {
-        // Skapa success meddelande
-        const successDiv = document.createElement('div');
-        successDiv.className = 'form-success-message';
-        successDiv.innerHTML = `
-            <div style="background: var(--secondary-green); color: white; padding: 1rem; border-radius: 8px; margin-top: 1rem;">
-                ✅ Tack för ditt meddelande! Vi återkommer så snart som möjligt.
+        // Create success message
+        const successMessage = document.createElement('div');
+        successMessage.className = 'form-success';
+        successMessage.innerHTML = `
+            <div class="success-content">
+                <div class="success-icon">✓</div>
+                <h3>Tack för ditt meddelande!</h3>
+                <p>Vi återkommer till dig inom 24 timmar.</p>
             </div>
         `;
         
-        const formContainer = document.querySelector('.contact-form-container');
-        if (formContainer) {
-            formContainer.appendChild(successDiv);
-            
-            // Ta bort efter 5 sekunder
-            setTimeout(() => {
-                successDiv.remove();
-                // Återställ formulär
-                if (fallbackForm) fallbackForm.reset();
-            }, 5000);
-        }
-    }
-
-    // Chat Widget
-    function initChatWidget() {
-        if (chatWidget) {
-            chatWidget.addEventListener('click', function() {
-                // Här kan HubSpot chat integreras
-                alert('Chat-funktionen kommer snart! Använd kontaktformuläret för att komma i kontakt med oss.');
-            });
-        }
+        // Add to page
+        document.body.appendChild(successMessage);
+        
+        // Remove after 5 seconds
+        setTimeout(() => {
+            successMessage.remove();
+        }, 5000);
     }
 
     // Read More Buttons
@@ -351,28 +303,328 @@
                 const description = serviceCard.querySelector('.service-description');
                 
                 if (description.classList.contains('expanded')) {
-                    // Kollapsa texten
                     description.classList.remove('expanded');
-                    this.classList.remove('expanded');
                     this.textContent = 'Läs mer';
                 } else {
-                    // Expandera texten
                     description.classList.add('expanded');
-                    this.classList.add('expanded');
                     this.textContent = 'Visa mindre';
-                }
-                
-                // Smooth scroll till knappen om den inte är synlig
-                if (!isElementInViewport(button)) {
-                    button.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'center'
-                    });
                 }
             });
         });
     }
 
+    // Dynamic Content Loading
+    function initDynamicContent() {
+        loadTestimonials();
+        loadCaseStudies();
+        loadTeamData();
+        loadSuccessMetrics();
+        loadClientLogos();
+    }
+
+    function loadTestimonials() {
+        const testimonialsGrid = document.getElementById('testimonialsGrid');
+        if (!testimonialsGrid || !window.testimonialsData) return;
+
+        const featuredTestimonials = window.testimonialsData.filter(t => t.featured).slice(0, 3);
+        
+        testimonialsGrid.innerHTML = featuredTestimonials.map(testimonial => `
+            <div class="testimonial-card">
+                <div class="testimonial-rating">
+                    ${'★'.repeat(testimonial.rating)}
+                </div>
+                <div class="testimonial-content">${testimonial.content}</div>
+                <div class="testimonial-author">
+                    <img src="${testimonial.avatar}" alt="${testimonial.name}" class="author-avatar">
+                    <div class="author-info">
+                        <div class="author-name">${testimonial.name}</div>
+                        <div class="author-title">${testimonial.title}</div>
+                        <div class="author-company">${testimonial.company}</div>
+                    </div>
+                </div>
+                <div class="testimonial-results">
+                    <div class="result-title">Resultat</div>
+                    <div class="results-grid">
+                        <div class="result-item">
+                            <div class="result-value">${testimonial.results.salesIncrease}</div>
+                            <div class="result-label">Försäljningsökning</div>
+                        </div>
+                        <div class="result-item">
+                            <div class="result-value">${testimonial.results.leadGeneration}</div>
+                            <div class="result-label">Lead generation</div>
+                        </div>
+                        <div class="result-item">
+                            <div class="result-value">${testimonial.results.conversionRate}</div>
+                            <div class="result-label">Konverteringsgrad</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    function loadCaseStudies() {
+        const caseStudiesGrid = document.getElementById('caseStudiesGrid');
+        if (!caseStudiesGrid || !window.caseStudiesData) return;
+
+        const featuredCaseStudies = window.caseStudiesData.filter(cs => cs.featured).slice(0, 3);
+        
+        caseStudiesGrid.innerHTML = featuredCaseStudies.map(caseStudy => `
+            <div class="case-study-card">
+                <div class="case-study-image">
+                    <img src="${caseStudy.image}" alt="${caseStudy.title}">
+                    <div class="case-study-overlay">
+                        <div class="overlay-content">
+                            <div class="overlay-title">${caseStudy.title}</div>
+                            <div class="overlay-subtitle">${caseStudy.subtitle}</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="case-study-content">
+                    <div class="case-study-header">
+                        <h3 class="case-study-title">${caseStudy.title}</h3>
+                        <p class="case-study-subtitle">${caseStudy.subtitle}</p>
+                        <div class="case-study-tags">
+                            ${caseStudy.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
+                        </div>
+                    </div>
+                    <div class="case-study-challenge">
+                        <h4 class="challenge-title">${caseStudy.challenge.title}</h4>
+                        <p class="challenge-description">${caseStudy.challenge.description}</p>
+                    </div>
+                    <div class="case-study-solution">
+                        <h4 class="solution-title">${caseStudy.solution.title}</h4>
+                        <ul class="solution-steps">
+                            ${caseStudy.solution.steps.map(step => `<li>${step}</li>`).join('')}
+                        </ul>
+                    </div>
+                    <div class="case-study-results">
+                        <div class="results-title">${caseStudy.results.title}</div>
+                        <div class="results-grid">
+                            ${caseStudy.results.metrics.map(metric => `
+                                <div class="result-item">
+                                    <div class="result-value">${metric.value}</div>
+                                    <div class="result-label">${metric.label}</div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                    <div class="case-study-cta">
+                        <button class="btn btn-primary">Läs mer</button>
+                    </div>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    function loadTeamData() {
+        const teamGrid = document.getElementById('teamGrid');
+        if (!teamGrid || !window.teamData) return;
+
+        const featuredTeamMembers = window.teamData.filter(member => member.featured).slice(0, 3);
+        
+        teamGrid.innerHTML = featuredTeamMembers.map(member => `
+            <div class="team-member">
+                <div class="member-image">
+                    <img src="${member.avatar}" alt="${member.name}">
+                    <div class="member-overlay">
+                        <div class="overlay-content">
+                            <div class="overlay-title">${member.name}</div>
+                            <div class="overlay-expertise">${member.expertise.join(', ')}</div>
+                            <div class="overlay-description">${member.bio}</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="member-content">
+                    <div class="member-header">
+                        <h3 class="member-name">${member.name}</h3>
+                        <div class="member-title">${member.title}</div>
+                        <div class="member-company">${member.company}</div>
+                    </div>
+                    <p class="member-bio">${member.bio}</p>
+                    <div class="member-expertise">
+                        <h4 class="expertise-title">Expertområden</h4>
+                        <div class="expertise-tags">
+                            ${member.expertise.map(exp => `<span class="expertise-tag">${exp}</span>`).join('')}
+                        </div>
+                    </div>
+                    <div class="member-certifications">
+                        <h4 class="certifications-title">Certifieringar</h4>
+                        <div class="certifications-list">
+                            ${member.certifications.map(cert => `
+                                <span class="certification">
+                                    <span class="cert-icon">${cert.icon}</span>
+                                    ${cert.name}
+                                </span>
+                            `).join('')}
+                        </div>
+                    </div>
+                    <div class="member-social">
+                        <a href="${member.social.linkedin}" class="social-link" target="_blank">in</a>
+                        <a href="${member.social.twitter}" class="social-link" target="_blank">X</a>
+                        <a href="mailto:${member.social.email}" class="social-link">@</a>
+                    </div>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    function loadSuccessMetrics() {
+        const successMetricsGrid = document.getElementById('successMetricsGrid');
+        if (!successMetricsGrid || !window.successMetricsData) return;
+
+        successMetricsGrid.innerHTML = window.successMetricsData.map(metric => `
+            <div class="metric-item">
+                <span class="metric-value">${metric.value}</span>
+                <div class="metric-label">${metric.label}</div>
+                <div class="metric-description">${metric.description}</div>
+            </div>
+        `).join('');
+    }
+
+    function loadClientLogos() {
+        const clientLogosGrid = document.getElementById('clientLogosGrid');
+        if (!clientLogosGrid || !window.clientLogosData) return;
+
+        clientLogosGrid.innerHTML = window.clientLogosData.map(client => `
+            <img src="${client.logo}" alt="${client.name}" class="client-logo">
+        `).join('');
+    }
+
+    // Calculator Presets
+    function initCalculatorPresets() {
+        const presetCards = document.querySelectorAll('.preset-card');
+        
+        presetCards.forEach(card => {
+            card.addEventListener('click', function() {
+                const preset = this.getAttribute('data-preset');
+                applyCalculatorPreset(preset);
+            });
+        });
+    }
+
+    function applyCalculatorPreset(preset) {
+        if (!window.scalebleCalculator) return;
+
+        const presets = {
+            startup: {
+                monthlyRevenue: 200000,
+                salesTeamSize: 2,
+                averageDealSize: 25000,
+                conversionRate: 10,
+                salesCycleLength: 120,
+                marketingBudget: 50000
+            },
+            scaleup: {
+                monthlyRevenue: 800000,
+                salesTeamSize: 8,
+                averageDealSize: 75000,
+                conversionRate: 15,
+                salesCycleLength: 90,
+                marketingBudget: 200000
+            },
+            enterprise: {
+                monthlyRevenue: 2000000,
+                salesTeamSize: 15,
+                averageDealSize: 150000,
+                conversionRate: 20,
+                salesCycleLength: 60,
+                marketingBudget: 500000
+            }
+        };
+
+        const presetData = presets[preset];
+        if (presetData) {
+            Object.assign(window.scalebleCalculator.currentValues, presetData);
+            window.scalebleCalculator.updateResults();
+        }
+    }
+
+    // Case Study Filter
+    function initCaseStudyFilter() {
+        const filterContainer = document.getElementById('caseStudyFilter');
+        if (!filterContainer || !window.caseStudyCategories) return;
+
+        filterContainer.innerHTML = window.caseStudyCategories.map(category => `
+            <div class="filter-tab ${category.id === 'all' ? 'active' : ''}" data-category="${category.id}">
+                ${category.name} (${category.count})
+            </div>
+        `).join('');
+
+        // Bind filter events
+        const filterTabs = filterContainer.querySelectorAll('.filter-tab');
+        filterTabs.forEach(tab => {
+            tab.addEventListener('click', function() {
+                const category = this.getAttribute('data-category');
+                filterCaseStudies(category);
+                
+                // Update active tab
+                filterTabs.forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+    }
+
+    function filterCaseStudies(category) {
+        const caseStudiesGrid = document.getElementById('caseStudiesGrid');
+        if (!caseStudiesGrid || !window.caseStudiesData) return;
+
+        let filteredCaseStudies = window.caseStudiesData;
+        
+        if (category !== 'all') {
+            filteredCaseStudies = window.caseStudiesData.filter(cs => cs.industry.toLowerCase() === category);
+        }
+
+        // Re-render case studies
+        caseStudiesGrid.innerHTML = filteredCaseStudies.map(caseStudy => `
+            <div class="case-study-card">
+                <div class="case-study-image">
+                    <img src="${caseStudy.image}" alt="${caseStudy.title}">
+                    <div class="case-study-overlay">
+                        <div class="overlay-content">
+                            <div class="overlay-title">${caseStudy.title}</div>
+                            <div class="overlay-subtitle">${caseStudy.subtitle}</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="case-study-content">
+                    <div class="case-study-header">
+                        <h3 class="case-study-title">${caseStudy.title}</h3>
+                        <p class="case-study-subtitle">${caseStudy.subtitle}</p>
+                        <div class="case-study-tags">
+                            ${caseStudy.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
+                        </div>
+                    </div>
+                    <div class="case-study-challenge">
+                        <h4 class="challenge-title">${caseStudy.challenge.title}</h4>
+                        <p class="challenge-description">${caseStudy.challenge.description}</p>
+                    </div>
+                    <div class="case-study-solution">
+                        <h4 class="solution-title">${caseStudy.solution.title}</h4>
+                        <ul class="solution-steps">
+                            ${caseStudy.solution.steps.map(step => `<li>${step}</li>`).join('')}
+                        </ul>
+                    </div>
+                    <div class="case-study-results">
+                        <div class="results-title">${caseStudy.results.title}</div>
+                        <div class="results-grid">
+                            ${caseStudy.results.metrics.map(metric => `
+                                <div class="result-item">
+                                    <div class="result-value">${metric.value}</div>
+                                    <div class="result-label">${metric.label}</div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                    <div class="case-study-cta">
+                        <button class="btn btn-primary">Läs mer</button>
+                    </div>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    // Utility functions
     function isElementInViewport(el) {
         const rect = el.getBoundingClientRect();
         return (
@@ -383,34 +635,6 @@
         );
     }
 
-    // Number Field Stepper
-    function initNumberSteppers() {
-        const numberFields = document.querySelectorAll('.custom-field-number');
-        
-        numberFields.forEach(field => {
-            const input = field.querySelector('input');
-            const stepperUp = field.querySelector('.input-stepper-up');
-            const stepperDown = field.querySelector('.input-stepper-down');
-            
-            if (stepperUp) {
-                stepperUp.addEventListener('click', () => {
-                    const currentValue = parseFloat(input.value) || 0;
-                    input.value = currentValue + 1;
-                    input.dispatchEvent(new Event('change'));
-                });
-            }
-            
-            if (stepperDown) {
-                stepperDown.addEventListener('click', () => {
-                    const currentValue = parseFloat(input.value) || 0;
-                    input.value = Math.max(0, currentValue - 1);
-                    input.dispatchEvent(new Event('change'));
-                });
-            }
-        });
-    }
-
-    // Utility Functions
     function debounce(func, wait) {
         let timeout;
         return function executedFunction(...args) {
@@ -422,24 +646,5 @@
             timeout = setTimeout(later, wait);
         };
     }
-
-    // Resize handler
-    window.addEventListener('resize', debounce(() => {
-        // Stäng mobile menu vid resize till desktop
-        if (window.innerWidth > 768 && isMobileMenuOpen) {
-            closeMobileMenu();
-        }
-    }, 250));
-
-    // Initialize number steppers när DOM är redo
-    document.addEventListener('DOMContentLoaded', initNumberSteppers);
-
-    // Exponera funktioner globalt för HubSpot integration
-    window.ScalebleWebsite = {
-        showFormLoading,
-        hideFormLoading,
-        showFormSuccess,
-        closeMobileMenu
-    };
 
 })(); 

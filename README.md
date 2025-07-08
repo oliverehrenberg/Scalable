@@ -1,242 +1,210 @@
-# Scaleble Website
+# Scaleble - B2B Försäljningskonsult
 
-En modern, responsiv website för Scaleble - B2B försäljningskonsulter med HubSpot-specialisering.
+En komplett, professionell hemsida för Scaleble - en B2B-försäljningskonsult som specialiserar sig på HubSpot-implementation och datadrivna försäljningsprocesser.
 
 ## 🚀 Funktioner
 
-- **Responsiv design** - Fungerar perfekt på alla enheter
-- **HubSpot integration** - Formulär, tracking och chat
-- **Automatiskt tema** - Baserat på systempreferenser
-- **Smooth scrolling** - Elegant navigering
-- **Animationer** - Scroll reveal och hover effects
-- **Prestanda-optimerad** - Komprimerad CSS och optimerad kod
-- **Tillgänglighet** - WCAG-kompatibel
-- **SEO-optimerad** - Semantisk HTML struktur
+### ✅ Implementerade Funktioner
 
-## 📁 Projektstruktur
+#### **1. Kundförtroende & Social Proof**
+- **Testimonials-sektion** med kundutlåtanden och kvantifierade resultat
+- **Kundlogotyper** från företag som litar på Scaleble
+- **Success metrics** som visar genomsnittliga resultat
+- **Case studies** med detaljerade kundfall från olika branscher
+
+#### **2. Team & Expertis**
+- **Team-sektion** med detaljerad information om experterna
+- **Certifieringar och expertområden** för varje teammedlem
+- **Team-statistik** som visar erfarenhet och framgångar
+- **Företagskultur och värderingar**
+
+#### **3. Interaktiva Verktyg**
+- **ROI-kalkylator** med dragbara sliders för realtidsberäkning
+- **Fördefinierade scenarier** (Startup, Scale-up, Enterprise)
+- **PDF-export** av kalkylatorresultat
+- **Chatbot** med lead qualification och automation
+
+#### **4. Avancerad Navigation**
+- **Header som döljs vid scroll nedåt** och visas vid scroll uppåt
+- **Smooth scroll** till sektioner
+- **Aktiv navigation** som uppdateras baserat på scroll-position
+- **Responsiv mobile menu**
+
+#### **5. Dynamiskt Innehåll**
+- **JavaScript-moduler** för alla interaktiva komponenter
+- **Data-filer** för testimonials, case studies och team
+- **Filtrering av case studies** per bransch
+- **Automatisk laddning** av innehåll
+
+#### **6. Professionell Design**
+- **Modern UI/UX** med smooth animations
+- **Responsiv design** för alla enheter
+- **Dark/light theme** baserat på systempreferenser
+- **Scroll-reveal animations**
+
+### 📁 Projektstruktur
 
 ```
-Scaleup/
-├── index.html              # Huvudsida
+Scaleble/
+├── index.html                 # Huvudsida
 ├── css/
-│   └── main.css            # Kompilerad CSS (genereras automatiskt)
-├── js/
-│   ├── main.js             # Huvudfunktionalitet
-│   └── hubspot.js          # HubSpot integration
-├── src/scss/               # SCSS källfiler
-│   ├── main.scss           # Huvud SCSS-fil
-│   ├── _variables.scss     # Variabler och konfiguration
-│   ├── base/               # Grundstilar
-│   └── components/         # Komponentstilar
-├── package.json            # NPM konfiguration
-└── README.md              # Denna fil
+│   └── main.css              # Kompilerad CSS
+├── src/
+│   ├── scss/
+│   │   ├── main.scss         # Huvud SCSS-fil
+│   │   ├── _variables.scss   # Variabler
+│   │   ├── base/             # Grundläggande stilar
+│   │   └── components/       # Komponenter
+│   │       ├── _testimonials.scss
+│   │       ├── _case-studies.scss
+│   │       ├── _team.scss
+│   │       ├── _calculator.scss
+│   │       ├── _chatbot.scss
+│   │       └── _footer.scss
+│   └── images/
+│       ├── testimonials/     # Kundfoton
+│       ├── clients/          # Kundlogotyper
+│       ├── case-studies/     # Case study bilder
+│       └── team/             # Team-foton
+└── js/
+    ├── main.js               # Huvud JavaScript
+    ├── data/                 # Data-filer
+    │   ├── testimonials.js
+    │   ├── case-studies.js
+    │   └── team.js
+    └── modules/              # JavaScript-moduler
+        ├── calculator.js
+        └── chatbot.js
 ```
 
-## 🛠️ Installation & Setup
+## 🛠️ Teknisk Implementation
 
-### 1. Grundinstallation
+### **SCSS-struktur**
+- **Modulär arkitektur** med separata komponenter
+- **Variabler** för konsistent design
+- **Responsiv design** med breakpoints
+- **Animations och transitions**
 
+### **JavaScript-moduler**
+- **ROICalculator** - Interaktiv kalkylator med dragbara sliders
+- **ScalebleChatbot** - AI-assistent med lead qualification
+- **Dynamisk innehållsladdning** från data-filer
+- **Event handling** och DOM-manipulation
+
+### **Data-struktur**
+- **Testimonials** med kundutlåtanden och resultat
+- **Case studies** med detaljerade processer och utfall
+- **Team-data** med expertområden och certifieringar
+- **Success metrics** och kundlogotyper
+
+## 🎯 Konverteringsoptimering
+
+### **Förtroendeingivande Element**
+1. **Kundtestimonials** med kvantifierade resultat
+2. **Case studies** från olika branscher
+3. **Team-expertis** och certifieringar
+4. **Success metrics** som visar genomsnittliga resultat
+
+### **Lead Generation**
+1. **ROI-kalkylator** för att visa värde
+2. **Chatbot** för lead qualification
+3. **Kontaktformulär** med validering
+4. **Call-to-action** knappar strategiskt placerade
+
+### **Användarupplevelse**
+1. **Smooth animations** och transitions
+2. **Responsiv design** för alla enheter
+3. **Intuitiv navigation** med scroll-effekter
+4. **Snabb laddningstid** med optimerad CSS
+
+## 📊 Prestanda & SEO
+
+### **Optimerad CSS**
+- **Kompilerad SCSS** till minifierad CSS
+- **Efficienta selektorer** för snabb rendering
+- **CSS Grid och Flexbox** för modern layout
+
+### **JavaScript-optimering**
+- **Modulär arkitektur** för bättre underhåll
+- **Event delegation** för effektiv event handling
+- **Lazy loading** av innehåll
+
+### **SEO-vänlig struktur**
+- **Semantisk HTML** med korrekta taggar
+- **Alt-text** för alla bilder
+- **Strukturerad data** för sökmotorer
+
+## 🚀 Komma igång
+
+### **Förutsättningar**
+- Node.js och npm installerat
+- Sass compiler
+
+### **Installation**
 ```bash
 # Klona projektet
-git clone [repo-url]
-cd Scaleup
+git clone [repository-url]
+cd Scaleble
 
-# Installera dependencies
+# Installera dependencies (om några)
 npm install
 
 # Kompilera SCSS till CSS
-npm run build-css
+sass src/scss/main.scss:css/main.css --style compressed
+
+# Öppna index.html i webbläsaren
+open index.html
 ```
 
-### 2. HubSpot Konfiguration
-
-#### Steg 1: Skaffa HubSpot uppgifter
-1. Logga in på ditt HubSpot-konto
-2. Gå till **Marketing** → **Forms**
-3. Skapa ett nytt formulär eller välj ett befintligt
-4. Notera **Form ID** (finns i URL:en eller formulärinställningar)
-5. Hitta din **Portal ID** under **Settings** → **Account Setup** → **Account Information**
-
-#### Steg 2: Uppdatera konfiguration
-Öppna `js/hubspot.js` och uppdatera följande variabler:
-
-```javascript
-const HUBSPOT_CONFIG = {
-    portalId: 'DIN_HUBSPOT_PORTAL_ID',  // Ersätt med riktig Portal ID
-    formId: 'DIN_HUBSPOT_FORM_ID',      // Ersätt med riktig Form ID
-    region: 'eu1',                      // Ändra om du använder annan region
-    // ... resten av konfigurationen
-};
-```
-
-#### Steg 3: HubSpot Tracking Code
-Lägg till HubSpot tracking code i `<head>`-sektionen av `index.html`:
-
-```html
-<!-- HubSpot Tracking Code -->
-<script type="text/javascript" id="hs-script-loader" async defer src="//js.hs-scripts.com/DIN_PORTAL_ID.js"></script>
-```
-
-### 3. Formulärkonfiguration
-
-Webbplatsen har både HubSpot-formulär och fallback-formulär:
-
-- **HubSpot-formulär**: Visas när HubSpot laddas korrekt
-- **Fallback-formulär**: Visas om HubSpot inte kan laddas
-
-Formuläret innehåller följande fält:
-- Förnamn (required)
-- Efternamn (required) 
-- E-post (required)
-- Företag
-- Telefon
-- Meddelande (required)
-
-## 🎨 Tema och Styling
-
-### CSS Variables
-Webbplatsen använder CSS custom properties för enkel temakonfiguration:
-
-```css
-:root {
-    --primary-purple: #8b5cf6;
-    --secondary-green: #10b981;
-    --text-dark: #1f2937;
-    --background-light: #ffffff;
-    /* ... fler variabler */
-}
-```
-
-### Automatiskt tema
-Temat väljs automatiskt baserat på användarens systempreferenser:
-- **Ljust tema**: När systemet är satt till ljust läge
-- **Mörkt tema**: När systemet är satt till mörkt läge
-- **Automatisk växling**: Temat uppdateras automatiskt när användaren ändrar systeminställningar
-
-### Responsiva breakpoints
-- **Mobile**: < 768px
-- **Tablet**: 768px - 1024px  
-- **Desktop**: > 1024px
-
-## 📱 Responsiv Design
-
-Webbplatsen är byggd mobile-first och anpassar sig automatiskt:
-
-- **Header**: Hamburger-meny på mobil, full navigation på desktop
-- **Hero**: Staplad layout på mobil, sida-vid-sida på desktop
-- **Sektioner**: Flexibla grid-system som anpassar sig
-- **Formulär**: Touch-vänlig design på mobil
-
-## 🔧 NPM Scripts
-
+### **Utveckling**
 ```bash
-# Kompilera SCSS till CSS (development)
-npm run build-css
+# Watch mode för SCSS
+sass --watch src/scss/main.scss:css/main.css
 
-# Kompilera SCSS till CSS (watch mode)
-npm run watch-css
-
-# Linta SCSS-filer
-npm run lint-scss
+# Live server (om installerat)
+npx live-server
 ```
 
-## 🚀 Deployment
+## 📈 Nästa Steg
 
-### För One.com eller traditionell hosting:
+### **Planerade Förbättringar**
+1. **HubSpot-integration** för lead capture
+2. **Analytics** och conversion tracking
+3. **A/B-testing** för optimering
+4. **Blog-sektion** för content marketing
+5. **E-bok nedladdning** för lead generation
 
-1. **Kompilera CSS**:
-   ```bash
-   npm run build-css
-   ```
+### **Tekniska Förbättringar**
+1. **Webpack** för bundling
+2. **TypeScript** för bättre kodkvalitet
+3. **Testing** med Jest
+4. **CI/CD** pipeline
 
-2. **Ladda upp filer**:
-   - `index.html`
-   - `css/` mapp
-   - `js/` mapp
-   - Eventuella tillgångsfiler (bilder, fonter)
+## 🎨 Design System
 
-3. **Konfigurera server**:
-   - Sätt `index.html` som default-fil
-   - Konfigurera GZIP-komprimering
-   - Sätt caching headers för statiska filer
+### **Färger**
+- **Primary Purple**: #8B5CF6
+- **Secondary Green**: #10B981
+- **Background**: #FFFFFF / #F9FAFB
+- **Text**: #1F2937 / #6B7280
 
-### För moderna hosting-plattformar (Vercel, Netlify):
+### **Typografi**
+- **Primary Font**: Inter, system-ui
+- **Headings**: Bold, 24px-48px
+- **Body**: Regular, 16px-18px
 
-1. Koppla Git-repository
-2. Build command: `npm run build-css`
-3. Publish directory: `./`
-
-## 🔍 SEO Optimering
-
-Webbplatsen är optimerad för sökmotorer:
-
-- **Semantisk HTML**: Korrekta HTML5-element
-- **Meta tags**: Title, description, keywords
-- **Schema markup**: Strukturerad data för företag
-- **Open Graph**: Social media-optimering
-- **Sitemap**: XML sitemap för indexering
-- **Robots.txt**: Crawler-instruktioner
-
-## 📊 Analytics & Tracking
-
-### HubSpot Analytics
-- Automatisk sidvisning-tracking
-- Formulär-submission tracking
-- CTA-klick tracking
-- Anpassade events
-
-### Google Analytics (valfritt)
-Lägg till GA4-kod för utökad analys:
-
-```html
-<!-- Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'GA_MEASUREMENT_ID');
-</script>
-```
-
-## 🛡️ Säkerhet
-
-- **HTTPS**: Används överallt i production
-- **Content Security Policy**: Skyddar mot XSS
-- **Input validation**: Formulärvalidering både frontend och backend
-- **No inline scripts**: All JavaScript i externa filer
-
-## 🧪 Testing
-
-### Manuell testning:
-- [x] Desktop/mobile responsivitet
-- [x] Formulär-funktionalitet  
-- [x] Navigation och smooth scroll
-- [x] Tema-växling
-- [x] Prestanda (PageSpeed Insights)
-- [x] Tillgänglighet (axe DevTools)
-
-### Browser-kompatibilitet:
-- ✅ Chrome 90+
-- ✅ Firefox 88+
-- ✅ Safari 14+
-- ✅ Edge 90+
+### **Spacing**
+- **Container**: max-width 1200px
+- **Section padding**: 80px-120px
+- **Grid gap**: 24px-48px
 
 ## 📞 Support
 
-För teknisk support eller frågor om implementeringen, kontakta utvecklingsteamet.
-
-### Viktiga filer att konfigurera:
-1. `js/hubspot.js` - HubSpot portal ID och form ID
-2. `index.html` - HubSpot tracking script
-3. `src/scss/_variables.scss` - Färger och styling
-
-### Utvecklingsworkflow:
-1. Gör ändringar i SCSS-filer (`src/scss/`)
-2. Kör `npm run build-css` för att kompilera
-3. Testa lokalt med en webbserver
-4. Deployja uppdaterade filer
+För frågor eller support, kontakta:
+- **Email**: info@scaleble.io
+- **Telefon**: +46 70 XXX XX XX
+- **Adress**: Linnégatan 17, Stockholm
 
 ---
 
-**Built with ❤️ for Scaleble** - Maximera din försäljning med expertkonsultation och HubSpot-automation. 
+**Scaleble** - Vi skapar framtidens försäljningsplattform 
