@@ -152,6 +152,9 @@ $z-popover: 1060;
 $z-tooltip: 1070;
 $z-toast: 1080;
 
+// Image paths
+$image-path: '../src/images';
+
 // Legacy Variables (for compatibility with existing SCSS)
 $bg-04: var(--gray-400);
 $bg-02: var(--text-primary);
