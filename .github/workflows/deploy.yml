@@ -36,11 +36,11 @@ jobs:
 
       # 5. Ladda upp artefakt till Pages (hela repo-roten)
       - name: Upload artifact
-        uses: actions/upload-pages-artifact@v2
+        uses: actions/upload-pages-artifact@v3
         with:
           path: '.'
 
       # 6. Deploya till GitHub Pages
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v2 
+        uses: actions/deploy-pages@v4 
