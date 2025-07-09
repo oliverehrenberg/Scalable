@@ -1,0 +1,46 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      # 1. Checka ut koden
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # 2. Sätt upp Node för Sass-bygget
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      # 3. Installera beroenden (sass)
+      - name: Install dependencies
+        run: |
+          npm ci
+
+      # 4. Bygg CSS (scss → css)
+      - name: Build CSS
+        run: |
+          npm run build-css
+
+      # 5. Ladda upp artefakt till Pages (hela repo-roten)
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v2
+        with:
+          path: '.'
+
+      # 6. Deploya till GitHub Pages
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v2 
