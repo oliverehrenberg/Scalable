@@ -1,6 +1,6 @@
-# Scaleble Website
+# Scalable Website
 
-En modern, responsiv website för Scaleble - B2B försäljningskonsulter med HubSpot-specialisering.
+En modern, responsiv website för Scalable - B2B försäljningskonsulter med HubSpot-specialisering.
 
 ## 🚀 Funktioner
 
@@ -239,4 +239,4 @@ För teknisk support eller frågor om implementeringen, kontakta utvecklingsteam
 
 ---
 
-**Built with ❤️ for Scaleble** - Maximera din försäljning med expertkonsultation och HubSpot-automation. 
+**Built with ❤️ for Scalable** - Maximera din försäljning med expertkonsultation och HubSpot-automation. 

@@ -18,10 +18,48 @@
 .solution-item {
   text-align: center;
   padding: $spacing-xl;
+  background: var(--bg-primary);
+  border-radius: $border-radius-lg;
+  box-shadow: var(--shadow-sm);
+  transition: all $transition-normal;
+  position: relative;
+  overflow: hidden;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--primary-purple), var(--secondary-green));
+    transform: scaleX(0);
+    transition: transform $transition-normal;
+  }
+  
+  &:hover::before {
+    transform: scaleX(1);
+  }
   
   &:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-lg);
+    
     .solution-icon {
-      transform: translateY(-5px);
+      transform: translateY(-5px) scale(1.05);
+    }
+    
+    // Hover effects for specific icons
+    .icon-growth .growth-arrow {
+      animation-duration: 0.8s;
+    }
+    
+    .icon-automation .gear {
+      animation-duration: 1.5s;
+    }
+    
+    .icon-integration .connection-node {
+      animation-duration: 1s;
     }
   }
 }
@@ -35,91 +73,122 @@
   justify-content: center;
   transition: transform $transition-normal;
   
-  // Circle icons
-  .icon-circles {
+  // Growth Chart Icon
+  .icon-growth {
     position: relative;
-    width: 60px;
-    height: 60px;
+    width: 80px;
+    height: 80px;
+    background: linear-gradient(135deg, rgba(139, 92, 246, 0.1), rgba(167, 139, 250, 0.1));
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 20px rgba(139, 92, 246, 0.15);
     
-    .circle {
-      position: absolute;
-      border-radius: 50%;
+    svg {
+      width: 48px;
+      height: 48px;
+    }
+    
+    .bar {
+      animation: barGrow 1.5s ease-out forwards;
+      transform-origin: bottom;
+      transform: scaleY(0);
       
-      &.circle-purple {
-        width: 40px;
-        height: 40px;
-        background: var(--primary-purple);
-        top: 0;
-        left: 0;
-      }
-      
-      &.circle-light {
-        width: 30px;
-        height: 30px;
-        background: var(--primary-purple-light);
-        bottom: 0;
-        right: 0;
-        opacity: 0.8;
-      }
+      &.bar-1 { animation-delay: 0.2s; }
+      &.bar-2 { animation-delay: 0.4s; }
+      &.bar-3 { animation-delay: 0.6s; }
+      &.bar-4 { animation-delay: 0.8s; }
+    }
+    
+    .arrow {
+      animation: arrowFloat 2s ease-in-out infinite;
+    }
+    
+    .arrow-line {
+      stroke-dasharray: 20;
+      stroke-dashoffset: 20;
+      animation: lineDraw 1.5s ease-out 1s forwards;
     }
   }
   
-  // Checkmark icon
-  .icon-checkmark {
-    width: 60px;
-    height: 60px;
+  // Automation Gears Icon
+  .icon-automation {
     position: relative;
+    width: 80px;
+    height: 80px;
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(139, 92, 246, 0.1));
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 20px rgba(99, 102, 241, 0.15);
     
-    .checkmark-line {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      width: 40px;
-      height: 4px;
-      background: var(--primary-purple);
-      border-radius: 2px;
-      transform: translate(-50%, -50%) rotate(45deg);
-      
-      &::after {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 15px;
-        width: 20px;
-        height: 4px;
-        background: var(--primary-purple);
-        border-radius: 2px;
-        transform: rotate(-90deg);
-        transform-origin: left center;
-      }
+    svg {
+      width: 48px;
+      height: 48px;
+    }
+    
+    .gear-main {
+      animation: gearRotate 4s linear infinite;
+      transform-origin: center;
+    }
+    
+    .gear-tooth {
+      animation: gearRotate 4s linear infinite;
+      transform-origin: 24px 24px;
+    }
+    
+    .gear-center {
+      animation: gearRotateReverse 3s linear infinite;
+    }
+    
+    .flow-arrow {
+      animation: flowPulse 2s ease-in-out infinite;
     }
   }
   
-  // Blocks icon
-  .icon-blocks {
+  // Integration Network Icon
+  .icon-integration {
     position: relative;
-    width: 60px;
-    height: 60px;
+    width: 80px;
+    height: 80px;
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(16, 185, 129, 0.1));
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 20px rgba(59, 130, 246, 0.15);
     
-    .block {
-      position: absolute;
-      border-radius: 4px;
+    svg {
+      width: 48px;
+      height: 48px;
+    }
+    
+    .node {
+      animation: nodePulse 2s ease-in-out infinite;
       
-      &.block-purple {
-        width: 25px;
-        height: 25px;
-        background: var(--primary-purple);
-        top: 0;
-        left: 0;
-      }
+      &.node-1 { animation-delay: 0s; }
+      &.node-2 { animation-delay: 0.7s; }
+      &.node-3 { animation-delay: 1.4s; }
+    }
+    
+    .connection {
+      stroke-dasharray: 10;
+      stroke-dashoffset: 10;
+      animation: connectionFlow 3s ease-in-out infinite;
       
-      &.block-light {
-        width: 20px;
-        height: 20px;
-        background: var(--primary-purple-light);
-        bottom: 0;
-        right: 0;
-      }
+      &.connection-1 { animation-delay: 0.3s; }
+      &.connection-2 { animation-delay: 0.6s; }
+      &.connection-3 { animation-delay: 0.9s; }
+    }
+    
+    .pulse {
+      animation: pulseMove 2s ease-in-out infinite;
+      
+      &.pulse-1 { animation-delay: 0.2s; }
+      &.pulse-2 { animation-delay: 0.4s; }
+      &.pulse-3 { animation-delay: 0.6s; }
     }
   }
 }
@@ -207,56 +276,80 @@
   height: 200px;
   position: relative;
   overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-primary);
   
-  .service-bg {
-    width: 100%;
-    height: 100%;
-    position: relative;
+  .service-icon {
+    width: 120px;
+    height: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform $transition-normal;
     
-    &.service-bg-red {
-      background: linear-gradient(135deg, #fef2f2 0%, #fecaca 100%);
+    svg {
+      width: 100%;
+      height: 100%;
+      filter: drop-shadow(0 4px 12px rgba(139, 92, 246, 0.15));
+    }
+    
+    // Tillväxtstrategi ikoner
+    &.service-icon-strategy {
+      .trend-line {
+        stroke-dasharray: 100;
+        stroke-dashoffset: 100;
+        animation: lineGrow 2s ease-out 0.5s forwards;
+      }
       
-      &::after {
-        content: '';
-        position: absolute;
-        top: 20%;
-        left: 20%;
-        width: 60%;
-        height: 60%;
-        background: rgba(139, 92, 246, 0.1);
-        border-radius: 20px;
-        transform: rotate(15deg);
+      .data-point {
+        opacity: 0;
+        transform: scale(0);
+        animation: pointAppear 0.5s ease-out forwards;
+        
+        &:nth-child(3) { animation-delay: 1s; }
+        &:nth-child(4) { animation-delay: 1.2s; }
+        &:nth-child(5) { animation-delay: 1.4s; }
+        &:nth-child(6) { animation-delay: 1.6s; }
+        &:nth-child(7) { animation-delay: 1.8s; }
       }
     }
     
-    &.service-bg-blue {
-      background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
-      
-      &::after {
-        content: '';
-        position: absolute;
-        top: 15%;
-        right: 15%;
-        width: 50%;
-        height: 50%;
-        background: rgba(139, 92, 246, 0.1);
-        border-radius: 50%;
+    // AI & Automation ikoner
+    &.service-icon-ai {
+      .gear-circle, .gear-center, rect {
+        animation: gearRotate 6s linear infinite;
+        transform-origin: 30px 30px;
       }
     }
     
-    &.service-bg-green {
-      background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+    // Kundaktivering ikoner
+    &.service-icon-activation {
+      .bar-1, .bar-2, .bar-3, .bar-4 {
+        transform: scaleY(0);
+        transform-origin: bottom;
+        animation: barGrow 0.8s ease-out forwards;
+        
+        &.bar-1 { animation-delay: 0.2s; }
+        &.bar-2 { animation-delay: 0.4s; }
+        &.bar-3 { animation-delay: 0.6s; }
+        &.bar-4 { animation-delay: 0.8s; }
+      }
       
-      &::after {
-        content: '';
-        position: absolute;
-        bottom: 20%;
-        left: 25%;
-        width: 50%;
-        height: 40%;
-        background: rgba(139, 92, 246, 0.1);
-        border-radius: 12px;
-        transform: rotate(-10deg);
+      path, line {
+        animation: arrowFloat 2s ease-in-out infinite 1.5s;
+      }
+    }
+  }
+  
+  // Hover effekter för service-ikoner
+  .service-card:hover & {
+    .service-icon {
+      transform: scale(1.1);
+      
+      svg {
+        filter: drop-shadow(0 6px 20px rgba(139, 92, 246, 0.25));
       }
     }
   }
@@ -660,5 +753,145 @@
   @media (max-width: $breakpoint-sm) {
     bottom: $spacing-lg;
     right: $spacing-lg;
+      }
+  }
+  
+
+  
+  // Solution Icons Animations
+@keyframes barGrow {
+  0% {
+    transform: scaleY(0);
+  }
+  100% {
+    transform: scaleY(1);
+  }
+}
+
+@keyframes arrowFloat {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-2px);
+  }
+}
+
+@keyframes lineDraw {
+  0% {
+    stroke-dashoffset: 20;
+  }
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes gearRotate {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes gearRotateReverse {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(-360deg);
+  }
+}
+
+@keyframes flowPulse {
+  0%, 100% {
+    opacity: 0.7;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes nodePulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 0.8;
+  }
+}
+
+@keyframes connectionFlow {
+  0% {
+    stroke-dashoffset: 10;
+  }
+  100% {
+    stroke-dashoffset: -10;
+  }
+}
+
+@keyframes pulseMove {
+  0%, 100% {
+    opacity: 0.3;
+    transform: scale(0.8);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.2);
+  }
+}
+
+// Service Icons Animations
+
+// Tillväxtstrategi animationer
+@keyframes lineGrow {
+  0% {
+    stroke-dashoffset: 100;
+  }
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes pointAppear {
+  0% {
+    opacity: 0;
+    transform: scale(0);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+// AI & Automation animationer
+@keyframes gearRotate {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+// Kundaktivering animationer
+@keyframes barGrow {
+  0% {
+    transform: scaleY(0);
+  }
+  100% {
+    transform: scaleY(1);
+  }
+}
+
+@keyframes arrowFloat {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-3px);
   }
 } 

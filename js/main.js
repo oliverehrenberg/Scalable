@@ -1,4 +1,4 @@
-// Scaleble Website JavaScript
+// Scalable Website JavaScript
 (function() {
     'use strict';
 
@@ -435,7 +435,7 @@
     document.addEventListener('DOMContentLoaded', initNumberSteppers);
 
     // Exponera funktioner globalt för HubSpot integration
-    window.ScalebleWebsite = {
+    window.ScalableWebsite = {
         showFormLoading,
         hideFormLoading,
         showFormSuccess,

@@ -16,45 +16,83 @@
 .footer-content {
   display: grid;
   grid-template-columns: 2fr 1fr 1fr 1fr;
-  gap: $spacing-3xl;
-  margin-bottom: $spacing-3xl;
-  
-  @media (max-width: $breakpoint-lg) {
-    grid-template-columns: 1fr 1fr;
-    gap: $spacing-2xl;
+  gap: 4rem;
+  margin-bottom: 4rem;
+  align-items: start;
+  @media (max-width: 1024px) {
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 3rem;
   }
-  
-  @media (max-width: $breakpoint-md) {
+  @media (max-width: 768px) {
     grid-template-columns: 1fr;
-    gap: $spacing-xl;
+    gap: 3rem;
+    text-align: center;
   }
 }
 
 // Footer Sections
 .footer-section {
-  .footer-brand {
+  &.footer-brand {
     .footer-logo {
       height: 40px;
       width: auto;
-      margin-bottom: $spacing-md;
+      margin-bottom: 1rem;
       filter: brightness(0) invert(1);
     }
-    
     .footer-tagline {
-      font-size: $font-size-base;
-      line-height: $line-height-relaxed;
+      font-size: 1rem;
+      line-height: 1.625;
       color: var(--text-muted);
-      margin-bottom: $spacing-lg;
+      margin: 0;
+      max-width: 280px;
     }
   }
-  
+  &.footer-social-section {
+    .footer-social-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: var(--primary-purple);
+      color: #fff;
+      border-radius: 0.5rem;
+      padding: 0.75rem 1rem;
+      font-weight: 500;
+      font-size: 0.875rem;
+      text-decoration: none;
+      transition: all 0.2s ease;
+      margin-top: 0.5rem;
+      
+      &:hover {
+        background: var(--primary-purple-dark);
+        transform: translateY(-1px);
+        color: #fff;
+        text-decoration: none;
+      }
+      
+      .footer-social-icon {
+        font-size: 0.875rem;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 1.5rem;
+        height: 1.5rem;
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 0.25rem;
+      }
+      
+      .footer-social-text {
+        font-size: 0.875rem;
+        font-weight: 500;
+      }
+    }
+  }
   .footer-title {
-    font-size: $font-size-lg;
-    font-weight: $font-weight-semibold;
+    font-size: 1.125rem;
+    font-weight: 600;
     color: var(--text-white);
-    margin-bottom: $spacing-lg;
+    margin-bottom: 1.5rem;
     position: relative;
-    
     &::after {
       content: '';
       position: absolute;
@@ -73,13 +111,13 @@
     margin: 0;
     
     li {
-      margin-bottom: $spacing-sm;
+      margin-bottom: 0.5rem;
       
       a {
         color: var(--text-muted);
         text-decoration: none;
-        transition: color $transition-fast;
-        font-size: $font-size-base;
+        transition: color 0.15s ease-in-out;
+        font-size: 1rem;
         
         &:hover {
           color: var(--primary-purple);
@@ -112,38 +150,37 @@
 // Footer Bottom
 .footer-bottom {
   border-top: 1px solid var(--border-dark);
-  padding-top: $spacing-xl;
+  padding-top: 2rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  
-  @media (max-width: $breakpoint-md) {
+  @media (max-width: 768px) {
     flex-direction: column;
-    gap: $spacing-lg;
+    gap: 1.5rem;
     text-align: center;
   }
   
   .footer-legal {
     .footer-copyright {
       color: var(--text-muted);
-      font-size: $font-size-sm;
-      margin-bottom: $spacing-sm;
+      font-size: 0.875rem;
+      margin-bottom: 0.5rem;
     }
     
     .footer-legal-links {
       display: flex;
-      gap: $spacing-lg;
+      gap: 1.5rem;
       
-      @media (max-width: $breakpoint-sm) {
+      @media (max-width: 640px) {
         flex-direction: column;
-        gap: $spacing-sm;
+        gap: 0.5rem;
       }
       
       a {
         color: var(--text-muted);
         text-decoration: none;
-        font-size: $font-size-sm;
-        transition: color $transition-fast;
+        font-size: 0.875rem;
+        transition: color 0.15s ease-in-out;
         
         &:hover {
           color: var(--primary-purple);

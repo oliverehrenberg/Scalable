@@ -1,7 +1,7 @@
 {
-  "name": "scaleble-website",
+  "name": "scalable-website",
   "version": "1.0.0",
-  "description": "Scaleble B2B sales website",
+  "description": "Scalable B2B sales website",
   "scripts": {
     "sass": "sass src/scss:css --watch",
     "build-css": "sass src/scss:css --style=compressed",

@@ -1,4 +1,4 @@
-// HubSpot Integration för Scaleble
+// HubSpot Integration för Scalable
 (function() {
     'use strict';
 
@@ -188,8 +188,8 @@
         const form = document.querySelector(`${HUBSPOT_CONFIG.target} form`) || 
                     document.getElementById('fallback-form');
         
-        if (form && window.ScalebleWebsite) {
-            window.ScalebleWebsite.showFormLoading(form);
+        if (form && window.ScalableWebsite) {
+            window.ScalableWebsite.showFormLoading(form);
         }
     }
 
@@ -197,14 +197,14 @@
         const form = document.querySelector(`${HUBSPOT_CONFIG.target} form`) || 
                     document.getElementById('fallback-form');
         
-        if (form && window.ScalebleWebsite) {
-            window.ScalebleWebsite.hideFormLoading(form);
+        if (form && window.ScalableWebsite) {
+            window.ScalableWebsite.hideFormLoading(form);
         }
     }
 
     function showSuccessMessage() {
-        if (window.ScalebleWebsite) {
-            window.ScalebleWebsite.showFormSuccess();
+        if (window.ScalableWebsite) {
+            window.ScalableWebsite.showFormSuccess();
         }
     }
 
@@ -323,7 +323,7 @@
     }
 
     // Exponera funktioner globalt
-    window.ScalebleHubSpot = {
+    window.ScalableHubSpot = {
         init,
         trackButtonClick,
         trackFormSubmission,
