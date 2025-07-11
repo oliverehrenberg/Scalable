@@ -291,26 +291,45 @@
             };
         }
 
-        // Säkerställ att konfigurationen är redo innan chat scriptet laddas
         console.log('HubSpot chat konfigurerad för:', isMobileDevice() ? 'Mobil' : 'Desktop');
         
-        // Vänta lite för att säkerställa att konfigurationen är satt
-        setTimeout(() => {
-            if (window.HubSpotConversations) {
-                console.log('HubSpot Conversations API tillgänglig');
-            } else {
-                console.log('Väntar på HubSpot Conversations API...');
-            }
-        }, 1000);
+        // Kontrollera om HubSpot Conversations API redan finns
+        if (window.HubSpotConversations) {
+            console.log('HubSpot Conversations API redan tillgänglig');
+            initializeChat();
+        } else {
+            // Vänta på att API:t ska laddas
+            let attempts = 0;
+            const maxAttempts = 10;
+            
+            const checkForHubSpotAPI = setInterval(() => {
+                attempts++;
+                if (window.HubSpotConversations) {
+                    console.log('HubSpot Conversations API laddat efter', attempts, 'försök');
+                    clearInterval(checkForHubSpotAPI);
+                    initializeChat();
+                } else if (attempts >= maxAttempts) {
+                    console.log('HubSpot Conversations API kunde inte laddas');
+                    clearInterval(checkForHubSpotAPI);
+                }
+            }, 500);
+        }
     }
 
     function initializeChat() {
         if (window.HubSpotConversations) {
-            window.HubSpotConversations.widget.load({
-                widgetOpen: false,
-                enableWelcomeMessage: true,
-                welcomeMessage: 'Hej! Hur kan vi hjälpa dig idag?'
-            });
+            try {
+                window.HubSpotConversations.widget.load({
+                    widgetOpen: false,
+                    enableWelcomeMessage: true,
+                    welcomeMessage: 'Hej! Hur kan vi hjälpa dig idag?'
+                });
+                console.log('HubSpot chat widget laddad');
+            } catch (error) {
+                console.error('Fel vid laddning av HubSpot chat widget:', error);
+            }
+        } else {
+            console.log('HubSpot Conversations API inte tillgänglig');
         }
     }
 
