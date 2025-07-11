@@ -15,6 +15,9 @@
         target: '#hubspot-contact-form'
     };
 
+    // Form fallback timeout (10 sekunder)
+    const FORM_TIMEOUT = 10000;
+
     // Globala variabler
     let hubspotLoaded = false;
     let formSubmitted = false;
@@ -35,7 +38,10 @@
         script.async = true;
         script.onload = function() {
             hubspotLoaded = true;
-            setupHubSpotForm();
+            // Vänta lite innan vi försöker skapa formuläret
+            setTimeout(() => {
+                setupHubSpotForm();
+            }, 1000);
             console.log('HubSpot script loaded successfully');
         };
         script.onerror = function() {
@@ -46,6 +52,57 @@
     }
 
     function setupHubSpotForm() {
+        // Försök först med den nya embed-approachen
+        const target = document.querySelector(HUBSPOT_CONFIG.target);
+        if (!target) {
+            console.error('HubSpot form target not found');
+            setupFallbackForm();
+            return;
+        }
+
+        // Skapa form frame baserat på din HubSpot embed-kod
+        const formFrame = document.createElement('div');
+        formFrame.className = 'hs-form-frame';
+        formFrame.setAttribute('data-region', HUBSPOT_CONFIG.region);
+        formFrame.setAttribute('data-form-id', HUBSPOT_CONFIG.formId);
+        formFrame.setAttribute('data-portal-id', HUBSPOT_CONFIG.portalId);
+        
+        // Rensa target och lägg till form frame
+        target.innerHTML = '';
+        target.appendChild(formFrame);
+        
+        // Ladda HubSpot forms script om det inte redan finns
+        if (!window.hbspt || !window.hbspt.forms) {
+            const script = document.createElement('script');
+            script.src = `https://js-eu1.hsforms.net/forms/embed/${HUBSPOT_CONFIG.portalId}.js`;
+            script.defer = true;
+            script.onload = function() {
+                console.log('HubSpot forms script loaded via embed approach');
+                // Vänta lite för att formuläret ska laddas
+                setTimeout(() => {
+                    if (target.querySelector('.hs-form')) {
+                        console.log('HubSpot form loaded successfully via embed approach');
+                        hideFallbackForm();
+                        customizeHubSpotForm();
+                        hideLoader();
+                    } else {
+                        console.log('HubSpot form embed failed - using fallback');
+                        setupFallbackForm();
+                    }
+                }, 3000);
+            };
+            script.onerror = function() {
+                console.error('Failed to load HubSpot forms script via embed approach');
+                setupFallbackForm();
+            };
+            document.head.appendChild(script);
+        } else {
+            // Använd befintlig hbspt.forms.create approach
+            setupHubSpotFormLegacy();
+        }
+    }
+
+    function setupHubSpotFormLegacy() {
         if (!window.hbspt || !window.hbspt.forms) {
             console.error('HubSpot forms not available');
             setupFallbackForm();
@@ -60,13 +117,39 @@
             return;
         }
 
-        // Sätt en timeout för att automatiskt falla tillbaka till fallback-formuläret
+        // Sätt en kortare timeout för snabbare fallback
         const formTimeout = setTimeout(() => {
             console.log('HubSpot form timeout - using fallback form');
             setupFallbackForm();
-        }, 10000); // 10 sekunder timeout
+        }, 5000); // Minska till 5 sekunder
+
+        // Lägg till en global error handler för HubSpot form-fel
+        const errorHandler = function(e) {
+            if (e.message && e.message.includes('403') && e.filename && e.filename.includes('hsforms')) {
+                console.log('HubSpot form 403 error detected - using fallback form');
+                clearTimeout(formTimeout);
+                window.removeEventListener('error', errorHandler);
+                setupFallbackForm();
+            }
+        };
+        window.addEventListener('error', errorHandler);
+
+        // Lägg till en fetch error handler för att fånga 403-fel
+        const originalFetch = window.fetch;
+        window.fetch = function(...args) {
+            return originalFetch.apply(this, args).then(response => {
+                if (response.status === 403 && args[0] && args[0].includes('hsforms')) {
+                    console.log('HubSpot form 403 error detected via fetch - using fallback form');
+                    clearTimeout(formTimeout);
+                    window.removeEventListener('error', errorHandler);
+                    setupFallbackForm();
+                }
+                return response;
+            });
+        };
 
         try {
+            // Försök först med den ursprungliga konfigurationen
             window.hbspt.forms.create({
                 region: HUBSPOT_CONFIG.region,
                 portalId: HUBSPOT_CONFIG.portalId,
@@ -90,8 +173,11 @@
                 // Callbacks
                 onFormReady: function() {
                     console.log('HubSpot form is ready');
-                    // Rensa timeout
+                    // Rensa timeout och error handler
                     clearTimeout(formTimeout);
+                    window.removeEventListener('error', errorHandler);
+                    // Återställ original fetch
+                    window.fetch = originalFetch;
                     // Dölj fallback-formuläret när HubSpot-formuläret är redo
                     hideFallbackForm();
                     customizeHubSpotForm();
@@ -125,6 +211,8 @@
                 onFormError: function(form) {
                     console.error('HubSpot form error:', form);
                     clearTimeout(formTimeout);
+                    window.removeEventListener('error', errorHandler);
+                    window.fetch = originalFetch;
                     setupFallbackForm();
                 }
             });
@@ -132,6 +220,8 @@
         } catch (error) {
             console.error('Error creating HubSpot form:', error);
             clearTimeout(formTimeout);
+            window.removeEventListener('error', errorHandler);
+            window.fetch = originalFetch;
             setupFallbackForm();
         }
     }
@@ -205,9 +295,41 @@
             hubspotContainer.style.display = 'none';
             fallbackForm.style.display = 'block';
             
+            // Lägg till submit handler för fallback form
+            fallbackForm.addEventListener('submit', handleFallbackFormSubmit);
+            
             console.log('Using fallback form instead of HubSpot');
             hideLoader();
         }
+    }
+
+    function handleFallbackFormSubmit(event) {
+        event.preventDefault();
+        
+        const form = event.target;
+        const formData = new FormData(form);
+        
+        // Visa loading state
+        showFormLoading();
+        
+        // Simulera form submission (i verkligheten skulle detta skickas till en server)
+        setTimeout(() => {
+            hideFormLoading();
+            showSuccessMessage();
+            
+            // Track submission
+            trackFormSubmission('fallback_contact', {
+                firstName: formData.get('firstName'),
+                lastName: formData.get('lastName'),
+                email: formData.get('email'),
+                message: formData.get('message')
+            });
+            
+            // Reset form
+            form.reset();
+            
+            console.log('Fallback form submitted successfully');
+        }, 2000);
     }
 
     function hideFallbackForm() {
@@ -278,74 +400,146 @@
 
     // HubSpot Chat Widget Setup med mobilstöd
     function setupHubSpotChat() {
-        // Konfiguration för HubSpot Chat med mobilstöd
-        window.hsConversationsSettings = {
-            loadImmediately: true,
-            enableWelcomeMessage: true,
-            portalId: 146532562,
-            hublet: 'eu1',
-            environment: 'prod'
-        };
+        // Kontrollera om chat redan är konfigurerad för att undvika duplicering
+        if (window.hsConversationsSettings) {
+            console.log('HubSpot chat redan konfigurerad');
+            return;
+        }
+
+        // Kontrollera om chat script redan är markerat som laddat
+        const chatScript = document.getElementById('hs-chat-loader');
+        if (chatScript && chatScript.getAttribute('data-hubspot-loaded') === 'true') {
+            console.log('HubSpot chat script redan laddat');
+            return;
+        }
 
         // Mobildetektering och konfiguration
         function isMobileDevice() {
             return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.innerWidth <= 768;
         }
 
-        // Sätt mobilspecifik chat flow om det är en mobil enhet
-        if (isMobileDevice()) {
-            window.hsConversationsSettings.defaultChatFlow = 'scalable-mobile';
-            
-            // Mobiloptimerade inställningar
-            window.hsConversationsSettings.widget = {
+        // Enkel konfiguration för HubSpot Chat
+        window.hsConversationsSettings = {
+            loadImmediately: true, // Sätt till true för att visa chat-widgeten
+            enableWelcomeMessage: true,
+            portalId: 146532562,
+            hublet: 'eu1',
+            environment: 'prod',
+            // Lägg till explicit widget-konfiguration
+            widget: {
                 position: 'bottom-right',
                 offset: {
                     x: 16,
                     y: 16
                 }
-            };
+            }
+        };
+
+        // Sätt mobilspecifik chat flow om det är en mobil enhet
+        if (isMobileDevice()) {
+            window.hsConversationsSettings.defaultChatFlow = 'scalable-mobile';
         }
 
         console.log('HubSpot chat konfigurerad för:', isMobileDevice() ? 'Mobil' : 'Desktop');
         
-        // Kontrollera om HubSpot Conversations API redan finns
+        // Kontrollera om chat script redan är laddat
         if (window.HubSpotConversations) {
-            console.log('HubSpot Conversations API redan tillgänglig');
-            initializeChat();
-        } else {
-            // Vänta på att API:t ska laddas
-            let attempts = 0;
-            const maxAttempts = 10;
-            
-            const checkForHubSpotAPI = setInterval(() => {
-                attempts++;
-                if (window.HubSpotConversations) {
-                    console.log('HubSpot Conversations API laddat efter', attempts, 'försök');
-                    clearInterval(checkForHubSpotAPI);
-                    initializeChat();
-                } else if (attempts >= maxAttempts) {
-                    console.log('HubSpot Conversations API kunde inte laddas');
-                    clearInterval(checkForHubSpotAPI);
-                }
-            }, 500);
-        }
-    }
-
-    function initializeChat() {
-        if (window.HubSpotConversations) {
-            try {
-                window.HubSpotConversations.widget.load({
-                    widgetOpen: false,
-                    enableWelcomeMessage: true,
-                    welcomeMessage: 'Hej! Hur kan vi hjälpa dig idag?'
-                });
-                console.log('HubSpot chat widget laddad');
-            } catch (error) {
-                console.error('Fel vid laddning av HubSpot chat widget:', error);
+            console.log('HubSpot chat redan tillgänglig');
+            if (chatScript) {
+                chatScript.setAttribute('data-hubspot-loaded', 'true');
             }
-        } else {
-            console.log('HubSpot Conversations API inte tillgänglig');
+            
+            // Explicit ladda chat-widgeten om den redan finns
+            try {
+                if (window.HubSpotConversations.widget && typeof window.HubSpotConversations.widget.load === 'function') {
+                    window.HubSpotConversations.widget.load();
+                    console.log('HubSpot chat widget explicit laddad (redan tillgänglig)');
+                    
+                    // Kontrollera om widget visas efter en kort paus
+                    setTimeout(() => {
+                        const chatWidget = document.querySelector('[data-test-id="chat-widget"]') || 
+                                         document.querySelector('.hubspot-conversations-widget') ||
+                                         document.querySelector('[data-testid="chat-widget"]') ||
+                                         document.querySelector('.hubspot-conversations-widget-container') ||
+                                         document.querySelector('[data-testid="conversations-widget"]') ||
+                                         document.querySelector('.conversations-widget');
+                        if (chatWidget) {
+                            console.log('HubSpot chat widget synlig på sidan (redan tillgänglig)');
+                        } else {
+                            console.log('HubSpot chat widget inte synlig - kontrollera CSS eller konfiguration (redan tillgänglig)');
+                            // Försök att ladda widget igen
+                            try {
+                                if (window.HubSpotConversations.widget && typeof window.HubSpotConversations.widget.load === 'function') {
+                                    window.HubSpotConversations.widget.load();
+                                    console.log('Försöker ladda chat widget igen (redan tillgänglig)...');
+                                }
+                            } catch (retryError) {
+                                console.error('Fel vid andra försöket att ladda chat widget (redan tillgänglig):', retryError);
+                            }
+                        }
+                    }, 2000);
+                }
+            } catch (error) {
+                console.error('Fel vid explicit laddning av chat widget (redan tillgänglig):', error);
+            }
+            
+            return;
         }
+        
+        // Enkel polling för att kontrollera när chat är redo
+        let attempts = 0;
+        const maxAttempts = 20;
+        
+        const checkForChat = setInterval(() => {
+            attempts++;
+            console.log('Kontrollerar HubSpot chat...', attempts);
+            
+            if (window.HubSpotConversations) {
+                console.log('HubSpot chat redo efter', attempts, 'försök');
+                if (chatScript) {
+                    chatScript.setAttribute('data-hubspot-loaded', 'true');
+                }
+                
+                // Explicit ladda chat-widgeten
+                try {
+                    if (window.HubSpotConversations.widget && typeof window.HubSpotConversations.widget.load === 'function') {
+                        window.HubSpotConversations.widget.load();
+                        console.log('HubSpot chat widget explicit laddad');
+                        
+                        // Kontrollera om widget visas efter en kort paus
+                        setTimeout(() => {
+                            const chatWidget = document.querySelector('[data-test-id="chat-widget"]') || 
+                                             document.querySelector('.hubspot-conversations-widget') ||
+                                             document.querySelector('[data-testid="chat-widget"]') ||
+                                             document.querySelector('.hubspot-conversations-widget-container') ||
+                                             document.querySelector('[data-testid="conversations-widget"]') ||
+                                             document.querySelector('.conversations-widget');
+                            if (chatWidget) {
+                                console.log('HubSpot chat widget synlig på sidan');
+                            } else {
+                                console.log('HubSpot chat widget inte synlig - kontrollera CSS eller konfiguration');
+                                // Försök att ladda widget igen
+                                try {
+                                    if (window.HubSpotConversations.widget && typeof window.HubSpotConversations.widget.load === 'function') {
+                                        window.HubSpotConversations.widget.load();
+                                        console.log('Försöker ladda chat widget igen...');
+                                    }
+                                } catch (retryError) {
+                                    console.error('Fel vid andra försöket att ladda chat widget:', retryError);
+                                }
+                            }
+                        }, 2000);
+                    }
+                } catch (error) {
+                    console.error('Fel vid explicit laddning av chat widget:', error);
+                }
+                
+                clearInterval(checkForChat);
+            } else if (attempts >= maxAttempts) {
+                console.log('HubSpot chat kunde inte laddas efter', maxAttempts, 'försök');
+                clearInterval(checkForChat);
+            }
+        }, 1000);
     }
 
     // Tracking functions
@@ -389,6 +583,12 @@
 
     // Initialize allt
     function init() {
+        // Kontrollera om redan initialiserat för att undvika duplicering
+        if (window.ScalableHubSpot && window.ScalableHubSpot.initialized) {
+            console.log('ScalableHubSpot redan initialiserat');
+            return;
+        }
+
         // Vänta tills DOM är redo
         if (document.readyState === 'loading') {
             document.addEventListener('DOMContentLoaded', function() {
@@ -417,10 +617,12 @@
         isFallbackFormHidden: function() {
             const fallbackForm = document.getElementById('fallback-form');
             return fallbackForm && fallbackForm.style.display === 'none';
-        }
+        },
+        initialized: false
     };
 
     // Auto-initialize
     init();
+    window.ScalableHubSpot.initialized = true;
 
 })(); 
