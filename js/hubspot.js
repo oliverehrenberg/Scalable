@@ -261,23 +261,38 @@
         console.log('Form submission tracked:', formType);
     }
 
-    // HubSpot Chat Widget Setup
+    // HubSpot Chat Widget Setup med mobilstöd
     function setupHubSpotChat() {
-        // Kolla om chat widget ska laddas
-        const chatWidget = document.getElementById('chatWidget');
-        if (!chatWidget) return;
+        // Konfiguration för HubSpot Chat med mobilstöd
+        window.hsConversationsSettings = {
+            loadImmediately: true,
+            enableWelcomeMessage: true,
+            portalId: 146532562,
+            hublet: 'eu1',
+            environment: 'prod'
+        };
 
-        // Ladda HubSpot chat script
-        if (!window.HubSpotConversations) {
-            const script = document.createElement('script');
-            script.src = `https://js.usemessages.com/conversations-embed.js`;
-            script.async = true;
-            script.onload = function() {
-                console.log('HubSpot chat loaded');
-                initializeChat();
-            };
-            document.head.appendChild(script);
+        // Mobildetektering och konfiguration
+        function isMobileDevice() {
+            return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.innerWidth <= 768;
         }
+
+        // Sätt mobilspecifik chat flow om det är en mobil enhet
+        if (isMobileDevice()) {
+            window.hsConversationsSettings.defaultChatFlow = 'scalable-mobile';
+            
+            // Mobiloptimerade inställningar
+            window.hsConversationsSettings.widget = {
+                position: 'bottom-right',
+                offset: {
+                    x: 16,
+                    y: 16
+                }
+            };
+        }
+
+        // HubSpot scriptet laddas automatiskt från index.html, så vi behöver bara konfigurera
+        console.log('HubSpot chat konfigurerad för:', isMobileDevice() ? 'Mobil' : 'Desktop');
     }
 
     function initializeChat() {
