@@ -895,3 +895,34 @@
     transform: translateY(-3px);
   }
 } 
+
+// Styling för 404-sidan
+.not-found {
+  background: var(--bg-secondary);
+  padding: $spacing-5xl 0;
+  text-align: center;
+
+  h1 {
+    font-size: $font-size-6xl;
+    font-weight: $font-weight-bold;
+    color: var(--text-primary);
+    margin-bottom: $spacing-lg;
+  }
+
+  h2 {
+    font-size: $font-size-2xl;
+    font-weight: $font-weight-medium;
+    color: var(--text-secondary);
+    margin-bottom: $spacing-md;
+  }
+
+  p {
+    font-size: $font-size-base;
+    color: var(--text-secondary);
+    margin-bottom: $spacing-2xl;
+  }
+
+  a.btn {
+    margin-top: $spacing-lg;
+  }
+} 
