@@ -223,8 +223,23 @@
 
     // Form Handling
     function initForms() {
+        // Endast lägg till fallback form handling om HubSpot inte har tagit över
         if (fallbackForm) {
-            fallbackForm.addEventListener('submit', handleFormSubmit);
+            // Vänta lite för att ge HubSpot tid att ladda
+            setTimeout(() => {
+                // Kontrollera om HubSpot-formuläret har ersatt fallback-formuläret
+                const hubspotTookOver = window.ScalableHubSpot && 
+                                       (window.ScalableHubSpot.isHubSpotFormLoaded() || 
+                                        window.ScalableHubSpot.isFallbackFormHidden());
+                
+                if (!hubspotTookOver && fallbackForm.style.display !== 'none') {
+                    // HubSpot har inte tagit över, använd fallback med riktig HubSpot API
+                    fallbackForm.addEventListener('submit', handleHubSpotFormSubmit);
+                    console.log('Using fallback form with HubSpot API integration');
+                } else {
+                    console.log('HubSpot form is active, fallback form disabled');
+                }
+            }, 3000);
         }
 
         // Input animations
@@ -245,7 +260,7 @@
         });
     }
 
-    function handleFormSubmit(e) {
+    function handleHubSpotFormSubmit(e) {
         e.preventDefault();
         
         // Validera formulär
@@ -255,11 +270,97 @@
             // Visa loading state
             showFormLoading(fallbackForm);
             
-            // Simulera form submission (ersätt med HubSpot integration)
+            // Skicka till HubSpot via API
+            submitToHubSpot(fallbackForm)
+                .then(() => {
+                    hideFormLoading(fallbackForm);
+                    showFormSuccess();
+                })
+                .catch((error) => {
+                    hideFormLoading(fallbackForm);
+                    showFormError('Ett fel uppstod vid skickandet. Försök igen eller kontakta oss direkt.');
+                    console.error('HubSpot submission error:', error);
+                });
+        }
+    }
+
+    function submitToHubSpot(form) {
+        const formData = new FormData(form);
+        
+        // HubSpot Forms API endpoint
+        const hubspotPortalId = '146532562';
+        const hubspotFormId = '1629d47d-3d57-4ee6-bf46-6422a6a81bec';
+        const endpoint = `https://api.hsforms.com/submissions/v3/integration/submit/${hubspotPortalId}/${hubspotFormId}`;
+        
+        // Skapa HubSpot-kompatibel data
+        const hubspotData = {
+            fields: [
+                {
+                    name: 'firstname',
+                    value: formData.get('firstName') || ''
+                },
+                {
+                    name: 'lastname', 
+                    value: formData.get('lastName') || ''
+                },
+                {
+                    name: 'email',
+                    value: formData.get('email') || ''
+                },
+                {
+                    name: 'message',
+                    value: formData.get('message') || ''
+                }
+            ],
+            context: {
+                pageUri: window.location.href,
+                pageName: document.title,
+                hutk: getCookie('hubspotutk') // HubSpot tracking cookie
+            }
+        };
+
+        return fetch(endpoint, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(hubspotData)
+        }).then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        });
+    }
+
+    function getCookie(name) {
+        const value = `; ${document.cookie}`;
+        const parts = value.split(`; ${name}=`);
+        if (parts.length === 2) return parts.pop().split(';').shift();
+        return '';
+    }
+
+    function showFormError(message) {
+        const errorDiv = document.createElement('div');
+        errorDiv.className = 'form-error-message';
+        errorDiv.innerHTML = `
+            <div style="background: var(--secondary-red); color: white; padding: 1rem; border-radius: 8px; margin-top: 1rem;">
+                ❌ ${message}
+            </div>
+        `;
+        
+        const formContainer = document.querySelector('.contact-form-container');
+        if (formContainer) {
+            // Ta bort eventuellt tidigare felmeddelande
+            const existingError = formContainer.querySelector('.form-error-message');
+            if (existingError) existingError.remove();
+            
+            formContainer.appendChild(errorDiv);
+            
+            // Ta bort efter 8 sekunder
             setTimeout(() => {
-                hideFormLoading(fallbackForm);
-                showFormSuccess();
-            }, 2000);
+                errorDiv.remove();
+            }, 8000);
         }
     }
 
@@ -441,6 +542,7 @@
         showFormLoading,
         hideFormLoading,
         showFormSuccess,
+        showFormError,
         closeMobileMenu
     };
 
@@ -452,5 +554,27 @@
             el.textContent = `© ${year} Scalable. Alla rättigheter förbehållna.`;
         }
     }
+
+    // Dölj fallback-formuläret om HubSpot-formuläret laddas via embed
+    function autoHideFallbackOnHubSpotEmbed() {
+        const container = document.getElementById('hubspot-contact-form');
+        if (!container) return;
+
+        const observer = new MutationObserver(() => {
+            const hubspotForm = container.querySelector('form');
+            const fallbackForm = document.getElementById('fallback-form');
+            if (hubspotForm && fallbackForm && fallbackForm.style.display !== 'none') {
+                fallbackForm.style.display = 'none';
+                // Ta bort eventuella event listeners genom att ersätta noden
+                const newForm = fallbackForm.cloneNode(true);
+                fallbackForm.parentNode.replaceChild(newForm, fallbackForm);
+                newForm.style.display = 'none';
+                observer.disconnect();
+            }
+        });
+        observer.observe(container, { childList: true, subtree: true });
+    }
+
+    document.addEventListener('DOMContentLoaded', autoHideFallbackOnHubSpotEmbed);
 
 })(); 

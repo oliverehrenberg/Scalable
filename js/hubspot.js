@@ -4,9 +4,10 @@
 
     // HubSpot Configuration
     const HUBSPOT_CONFIG = {
-        portalId: 'YOUR_HUBSPOT_PORTAL_ID', // Ersätt med riktig Portal ID
-        formId: 'YOUR_HUBSPOT_FORM_ID', // Ersätt med riktig Form ID
-        region: 'eu1', // Ändra om annat region
+        portalId: '146532562', 
+        formId: '1629d47d-3d57-4ee6-bf46-6422a6a81bec', 
+        
+        region: 'eu1', // Ändra till 'na1' för Nordamerika eller 'ap1' för Asien-Stillahavet om nödvändigt
         css: '',
         cssClass: 'hubspot-form',
         submitButtonClass: 'btn btn-primary',
@@ -30,7 +31,7 @@
 
     function loadHubSpotScript() {
         const script = document.createElement('script');
-        script.src = 'https://js.hsforms.net/forms/embed/v2.js';
+        script.src = 'https://js-eu1.hsforms.net/forms/embed/v2.js';
         script.async = true;
         script.onload = function() {
             hubspotLoaded = true;
@@ -83,6 +84,8 @@
                 // Callbacks
                 onFormReady: function() {
                     console.log('HubSpot form is ready');
+                    // Dölj fallback-formuläret när HubSpot-formuläret är redo
+                    hideFallbackForm();
                     customizeHubSpotForm();
                     hideLoader();
                 },
@@ -138,12 +141,11 @@
             
             if (field) {
                 field.placeholder = fieldMappings[fieldName].placeholder;
-                
+                field.classList.add('custom-field');
                 // Lägg till focus/blur events för animationer
                 field.addEventListener('focus', function() {
                     this.closest('.hs-form-field').classList.add('focused');
                 });
-                
                 field.addEventListener('blur', function() {
                     this.closest('.hs-form-field').classList.remove('focused');
                     if (this.value) {
@@ -153,7 +155,6 @@
                     }
                 });
             }
-            
             if (label) {
                 label.textContent = fieldMappings[fieldName].label;
             }
@@ -163,11 +164,21 @@
         const submitBtn = form.querySelector('input[type="submit"]');
         if (submitBtn) {
             submitBtn.value = 'Skicka meddelande';
-            submitBtn.classList.add('btn', 'btn-primary');
+            submitBtn.classList.add('btn', 'btn-primary', 'form-submit');
         }
 
-        // Lägg till CSS klasser för styling
-        form.classList.add('custom-hubspot-form');
+        // Lägg till layout-struktur som matchar originalet
+        const formFields = form.querySelectorAll('.hs-form-field');
+        const firstNameField = form.querySelector('.hs-form-field input[name="firstname"]')?.closest('.hs-form-field');
+        const lastNameField = form.querySelector('.hs-form-field input[name="lastname"]')?.closest('.hs-form-field');
+        if (firstNameField && lastNameField) {
+            const nameRow = document.createElement('div');
+            nameRow.classList.add('form-row');
+            firstNameField.parentNode.insertBefore(nameRow, firstNameField);
+            nameRow.appendChild(firstNameField);
+            nameRow.appendChild(lastNameField);
+        }
+        // INGEN CSS-injektion här! Styling styrs av SCSS.
     }
 
     function setupFallbackForm() {
@@ -181,6 +192,20 @@
             
             console.log('Using fallback form instead of HubSpot');
             hideLoader();
+        }
+    }
+
+    function hideFallbackForm() {
+        const fallbackForm = document.getElementById('fallback-form');
+        if (fallbackForm) {
+            fallbackForm.style.display = 'none';
+            
+            // Ta bort alla event listeners från fallback-formuläret
+            const newForm = fallbackForm.cloneNode(true);
+            fallbackForm.parentNode.replaceChild(newForm, fallbackForm);
+            newForm.style.display = 'none';
+            
+            console.log('Fallback form hidden - using HubSpot form');
         }
     }
 
@@ -327,7 +352,14 @@
         init,
         trackButtonClick,
         trackFormSubmission,
-        setupFallbackForm
+        setupFallbackForm,
+        isHubSpotFormLoaded: function() {
+            return hubspotLoaded && document.querySelector('#hubspot-contact-form .hs-form');
+        },
+        isFallbackFormHidden: function() {
+            const fallbackForm = document.getElementById('fallback-form');
+            return fallbackForm && fallbackForm.style.display === 'none';
+        }
     };
 
     // Auto-initialize
