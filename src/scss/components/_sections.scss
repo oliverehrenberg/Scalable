@@ -965,3 +965,57 @@
     border-bottom: none;
   }
 } 
+
+// Cookies page styling
+.cookies-content {
+  background: var(--bg-secondary);
+  padding-top: $spacing-5xl;
+  
+  .section-header {
+    text-align: center;
+    margin-bottom: $spacing-3xl;
+  }
+  
+  .section-subtitle {
+    font-size: $font-size-base;
+    color: var(--text-secondary);
+    margin-top: $spacing-sm;
+  }
+  
+  .cookies-text {
+    max-width: 800px;
+    margin: 0 auto;
+    font-size: $font-size-base;
+    color: var(--text-secondary);
+    line-height: $line-height-relaxed;
+    
+    h2 {
+      font-size: $font-size-xl;
+      font-weight: $font-weight-semibold;
+      color: var(--text-primary);
+      margin-top: $spacing-2xl;
+      margin-bottom: $spacing-md;
+    }
+    
+    p {
+      margin-bottom: $spacing-md;
+    }
+    
+    ul {
+      margin: $spacing-md 0 $spacing-md 1.5em;
+      list-style-type: disc;
+    }
+    
+    li {
+      margin-bottom: $spacing-sm;
+    }
+  }
+  
+  section {
+    margin-bottom: $spacing-4xl;
+    
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+} 
