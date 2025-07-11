@@ -291,8 +291,17 @@
             };
         }
 
-        // HubSpot scriptet laddas automatiskt från index.html, så vi behöver bara konfigurera
+        // Säkerställ att konfigurationen är redo innan chat scriptet laddas
         console.log('HubSpot chat konfigurerad för:', isMobileDevice() ? 'Mobil' : 'Desktop');
+        
+        // Vänta lite för att säkerställa att konfigurationen är satt
+        setTimeout(() => {
+            if (window.HubSpotConversations) {
+                console.log('HubSpot Conversations API tillgänglig');
+            } else {
+                console.log('Väntar på HubSpot Conversations API...');
+            }
+        }, 1000);
     }
 
     function initializeChat() {
