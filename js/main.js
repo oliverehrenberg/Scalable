@@ -28,6 +28,8 @@
         initChatWidget();
         initMobileMenu();
         initReadMoreButtons();
+        // Uppdatera sidfötens årtal automatiskt
+        updateFooterYear();
     });
 
     // System Theme Management
@@ -441,5 +443,14 @@
         showFormSuccess,
         closeMobileMenu
     };
+
+    // Lägg till funktion för att uppdatera sidfötens årtal automatiskt
+    function updateFooterYear() {
+        const el = document.querySelector('.footer-copyright');
+        if (el) {
+            const year = new Date().getFullYear();
+            el.textContent = `© ${year} Scalable. Alla rättigheter förbehållna.`;
+        }
+    }
 
 })(); 
