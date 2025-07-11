@@ -926,3 +926,42 @@
     margin-top: $spacing-lg;
   }
 } 
+
+// Cookie table styling
+.cookie-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: $spacing-xl 0;
+  background: var(--bg-primary);
+  border-radius: $border-radius-lg;
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+
+  th, td {
+    padding: $spacing-md $spacing-lg;
+    text-align: left;
+    border-bottom: 1px solid var(--border-light);
+  }
+
+  th {
+    background: var(--bg-secondary);
+    font-weight: $font-weight-semibold;
+    color: var(--text-primary);
+    font-size: $font-size-sm;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  td {
+    color: var(--text-secondary);
+    font-size: $font-size-sm;
+  }
+
+  tr:hover {
+    background: var(--bg-secondary);
+  }
+
+  tr:last-child td {
+    border-bottom: none;
+  }
+} 
