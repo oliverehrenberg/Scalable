@@ -60,6 +60,12 @@
             return;
         }
 
+        // Sätt en timeout för att automatiskt falla tillbaka till fallback-formuläret
+        const formTimeout = setTimeout(() => {
+            console.log('HubSpot form timeout - using fallback form');
+            setupFallbackForm();
+        }, 10000); // 10 sekunder timeout
+
         try {
             window.hbspt.forms.create({
                 region: HUBSPOT_CONFIG.region,
@@ -84,6 +90,8 @@
                 // Callbacks
                 onFormReady: function() {
                     console.log('HubSpot form is ready');
+                    // Rensa timeout
+                    clearTimeout(formTimeout);
                     // Dölj fallback-formuläret när HubSpot-formuläret är redo
                     hideFallbackForm();
                     customizeHubSpotForm();
@@ -112,11 +120,18 @@
                             value: 1
                         });
                     }
+                },
+
+                onFormError: function(form) {
+                    console.error('HubSpot form error:', form);
+                    clearTimeout(formTimeout);
+                    setupFallbackForm();
                 }
             });
 
         } catch (error) {
             console.error('Error creating HubSpot form:', error);
+            clearTimeout(formTimeout);
             setupFallbackForm();
         }
     }
