@@ -1,0 +1,10 @@
+/* Kommentar: Mörkt läge – vit bakgrund och vit kant runt HubSpot-formuläret */
+.dark-theme .hs-form-frame {
+  background: #ffffff;
+  border: 1px solid #ffffff;
+  border-radius: 12px;
+  padding: 32px;
+  box-shadow: var(--shadow-lg);
+}
+
+

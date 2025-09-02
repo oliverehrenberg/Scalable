@@ -465,6 +465,15 @@ select.custom-field {
       background: rgba(139, 92, 246, 0.1);
     }
   }
+
+  // Kommentar: I mörkt läge ska HubSpot-formuläret ha vit ruta och vit bakgrund
+  .hs-form-frame {
+    background: #ffffff;
+    border: 1px solid #ffffff;
+    border-radius: $border-radius-xl;
+    padding: $spacing-xl;
+    box-shadow: var(--shadow-lg);
+  }
 }
 
 // Responsive Adjustments
